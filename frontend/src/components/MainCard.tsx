@@ -7,10 +7,12 @@ import {
   Typography,
   CardActions,
   makeStyles,
-  Grid
+  Grid,
+  TextField
 } from "@material-ui/core";
 import { DndProvider } from "react-dnd";
 import Backend from "react-dnd-html5-backend";
+import AddBoxOutlinedIcon from "@material-ui/icons/AddSharp";
 
 function MainCard() {
   const classes = useStyles();
@@ -24,27 +26,27 @@ function MainCard() {
         >
           Mobster
         </Typography>
-        <Typography variant="h5" component="h2">
-          a
-        </Typography>
-        <Typography className={classes.pos} color="textSecondary">
-          adjective
-        </Typography>
-        <Typography variant="body2" component="p">
-          well meaning and kindly.
-          <br />
-          {'"a benevolent smile"'}
-        </Typography>
 
         <Grid container spacing={3}>
           <Grid item xs={6}>
-            <h1>aushduashdosahj</h1>
+            <TextField
+              id="outlined-basic"
+              variant="outlined"
+              label="Enter the name here"
+            ></TextField>
+
+            <Button
+              className={classes.addButton}
+              variant="contained"
+              color="secondary"
+            >
+              Add Participant
+            </Button>
           </Grid>
           <Grid item xs={6}>
             <DndProvider backend={Backend}>{<DndPeople />}</DndProvider>
           </Grid>
         </Grid>
-
       </CardContent>
       <CardActions>
         <Button className={classes.button} variant="contained" color="primary">
@@ -57,12 +59,22 @@ function MainCard() {
 
 const useStyles = makeStyles({
   root: {
-    minWidth: 775
+    minWidth: 875,
+    backgroundColor: "rgba(255, 255, 255, 0.9)",
+    margin: "0px auto 50px",
+    maxWidth: "600px",
+    width: "90%",
+    textAlign: "center"
   },
-  bullet: {
-    display: "inline-block",
-    margin: "0 2px",
-    transform: "scale(0.8)"
+  addBoxIcon: {
+    paddingTop: "20px",
+    fontSize: "30px",
+    color: "primary"
+  },
+  addButton: {
+    // marginTop: "2px",
+    marginLeft: "5px",
+    height: "54px"
   },
   title: {
     fontSize: 35,

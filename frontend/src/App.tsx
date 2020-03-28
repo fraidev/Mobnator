@@ -1,12 +1,24 @@
 import React from "react";
-import { makeStyles } from "@material-ui/core";
+import { makeStyles, createMuiTheme, ThemeProvider } from "@material-ui/core";
 import MainCard from "./components/MainCard";
+import { teal, blue } from "@material-ui/core/colors";
 
 function App() {
   const classes = useStyles();
 
-  return <div className={classes.App}>{<MainCard />}</div>;
+  return (
+    <div className={classes.App}>
+      <ThemeProvider theme={theme}>{<MainCard />}</ThemeProvider>
+    </div>
+  );
 }
+
+const theme = createMuiTheme({
+  palette: {
+    primary: blue,
+    secondary: teal
+  }
+});
 
 const useStyles = makeStyles({
   App: {
