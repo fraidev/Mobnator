@@ -614,11 +614,6 @@ ansi-escapes@^4.2.1:
   dependencies:
     type-fest "^0.11.0"
 
-ansi-regex@^3.0.0:
-  version "3.0.0"
-  resolved "https://registry.yarnpkg.com/ansi-regex/-/ansi-regex-3.0.0.tgz#ed0317c322064f79466c02966bddb605ab37d998"
-  integrity sha1-7QMXwyIGT3lGbAKWa922Bas32Zg=
-
 ansi-regex@^4.0.0, ansi-regex@^4.1.0:
   version "4.1.0"
   resolved "https://registry.yarnpkg.com/ansi-regex/-/ansi-regex-4.1.0.tgz#8b9f8f08cf1acb843756a839ca8c7e3168c51997"
@@ -981,19 +976,6 @@ cli-width@^2.0.0:
   version "2.2.0"
   resolved "https://registry.yarnpkg.com/cli-width/-/cli-width-2.2.0.tgz#ff19ede8a9a5e579324147b0c11f0fbcbabed639"
   integrity sha1-/xnt6Kml5XkyQUewwR8PvLq+1jk=
-
-clime@^0.5.10:
-  version "0.5.10"
-  resolved "https://registry.yarnpkg.com/clime/-/clime-0.5.10.tgz#b4862cc41fbd5d0d01bd0504b8ccb8ae639c341a"
-  integrity sha512-FpqeE23ukoEzsS7IkRNWf5ssg1BoiKBr55ra8fxrMXZuaHhsRY+gCJwMOUIrQrVEuIYAaUxzBd/2Q6kek6ecRg==
-  dependencies:
-    chalk "^2.1.0"
-    extendable-error "^0.1.5"
-    hyphenate "^0.2.1"
-    parse-messy-time "^2.1.0"
-    reflect-metadata "^0.1.10"
-    strip-ansi "^4.0.0"
-    villa "^0.2.11"
 
 cliui@^6.0.0:
   version "6.0.0"
@@ -1657,11 +1639,6 @@ extend@~3.0.2:
   resolved "https://registry.yarnpkg.com/extend/-/extend-3.0.2.tgz#f8b1136b4071fbd8eb140aff858b1019ec2915fa"
   integrity sha512-fjquC59cD7CyW6urNXK0FBufkZcoiGG80wTuPujX590cB5Ttln20E2UB4S/WARVqhXffZl2LNgS+gQdPIIim/g==
 
-extendable-error@^0.1.5:
-  version "0.1.5"
-  resolved "https://registry.yarnpkg.com/extendable-error/-/extendable-error-0.1.5.tgz#122308a7097bc89a263b2c4fbf089c78140e3b6d"
-  integrity sha1-EiMIpwl7yJomOyxPvwiceBQOO20=
-
 external-editor@^3.0.3:
   version "3.1.0"
   resolved "https://registry.yarnpkg.com/external-editor/-/external-editor-3.1.0.tgz#cb03f740befae03ea4d283caed2741a83f335495"
@@ -1976,11 +1953,6 @@ has@^1.0.3:
   dependencies:
     function-bind "^1.1.1"
 
-help@^3.0.2:
-  version "3.0.2"
-  resolved "https://registry.yarnpkg.com/help/-/help-3.0.2.tgz#96e190d4a0a453b89c2cb4b05ab38e3a8f9fdadd"
-  integrity sha1-luGQ1KCkU7icLLSwWrOOOo+f2t0=
-
 hosted-git-info@^2.1.4:
   version "2.8.8"
   resolved "https://registry.yarnpkg.com/hosted-git-info/-/hosted-git-info-2.8.8.tgz#7539bd4bc1e0e0a895815a2e0262420b12858488"
@@ -2011,11 +1983,6 @@ human-signals@^1.1.1:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/human-signals/-/human-signals-1.1.1.tgz#c5b1cd14f50aeae09ab6c59fe63ba3395fe4dfa3"
   integrity sha512-SEQu7vl8KjNL2eoGBLF3+wAjpsNfA9XMlXAYj/3EdaNfAlxKthD1xjEQfGOUhllCGGJVNY34bRr6lPINhNjyZw==
-
-hyphenate@^0.2.1:
-  version "0.2.4"
-  resolved "https://registry.yarnpkg.com/hyphenate/-/hyphenate-0.2.4.tgz#5c1a99cebef6fe889744cdc339beb60865e12438"
-  integrity sha512-COZPA5RLSvGJDlWrbMcKF16tKcfCaNNh63yA7QldGz6i/BVJAeYCXPQAiXUzS0y2pxY7c8VId0CPvxm2Rbisqw==
 
 iconv-lite@0.4.24, iconv-lite@^0.4.24:
   version "0.4.24"
@@ -3302,11 +3269,6 @@ parse-json@^2.2.0:
   dependencies:
     error-ex "^1.2.0"
 
-parse-messy-time@^2.1.0:
-  version "2.1.0"
-  resolved "https://registry.yarnpkg.com/parse-messy-time/-/parse-messy-time-2.1.0.tgz#7a14ce7a1c4f65b5ede243399cc056d86bd57ad5"
-  integrity sha1-ehTOehxPZbXt4kM5nMBW2GvVetU=
-
 parse5@5.1.0:
   version "5.1.0"
   resolved "https://registry.yarnpkg.com/parse5/-/parse5-5.1.0.tgz#c59341c9723f414c452975564c7c00a68d58acd2"
@@ -3508,11 +3470,6 @@ realpath-native@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/realpath-native/-/realpath-native-2.0.0.tgz#7377ac429b6e1fd599dc38d08ed942d0d7beb866"
   integrity sha512-v1SEYUOXXdbBZK8ZuNgO4TBjamPsiSgcFr0aP+tEKpQZK8vooEUqV6nm6Cv502mX4NF2EfsnVqtNAHG+/6Ur1Q==
-
-reflect-metadata@^0.1.10:
-  version "0.1.13"
-  resolved "https://registry.yarnpkg.com/reflect-metadata/-/reflect-metadata-0.1.13.tgz#67ae3ca57c972a2aa1642b10fe363fe32d49dc08"
-  integrity sha512-Ts1Y/anZELhSsjMcU605fU9RE4Oi3p5ORujwbIKXfWa+0Zxs510Qrmrce5/Jowq3cHSZSJqBjypxmHarc+vEWg==
 
 regenerator-runtime@^0.13.4:
   version "0.13.5"
@@ -4016,13 +3973,6 @@ string.prototype.trimright@^2.1.1:
     define-properties "^1.1.3"
     function-bind "^1.1.1"
 
-strip-ansi@^4.0.0:
-  version "4.0.0"
-  resolved "https://registry.yarnpkg.com/strip-ansi/-/strip-ansi-4.0.0.tgz#a8479022eb1ac368a871389b635262c505ee368f"
-  integrity sha1-qEeQIusaw2iocTibY1JixQXuNo8=
-  dependencies:
-    ansi-regex "^3.0.0"
-
 strip-ansi@^5.1.0, strip-ansi@^5.2.0:
   version "5.2.0"
   resolved "https://registry.yarnpkg.com/strip-ansi/-/strip-ansi-5.2.0.tgz#8c9a536feb6afc962bdfa5b104a5091c1ad9c0ae"
@@ -4348,11 +4298,6 @@ verror@1.10.0:
     assert-plus "^1.0.0"
     core-util-is "1.0.2"
     extsprintf "^1.2.0"
-
-villa@^0.2.11:
-  version "0.2.11"
-  resolved "https://registry.yarnpkg.com/villa/-/villa-0.2.11.tgz#a99a1c0ac01025b7311bb550c1fa7f8e6570692a"
-  integrity sha1-qZocCsAQJbcxG7VQwfp/jmVwaSo=
 
 w3c-hr-time@^1.0.1:
   version "1.0.2"
