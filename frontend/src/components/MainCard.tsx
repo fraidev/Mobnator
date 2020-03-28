@@ -79,7 +79,7 @@ const MainCard: React.FC = () => {
           color="textSecondary"
           gutterBottom
         >
-          Mobster
+          Mobnator
         </Typography>
 
         <Grid container spacing={3}>
