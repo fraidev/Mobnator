@@ -1,6 +1,5 @@
-import React from "react";
+import React, { useState, useCallback } from "react";
 import Button from "@material-ui/core/Button";
-import DndPeople from "./DndPeople";
 import {
   Card,
   CardContent,
@@ -12,12 +11,69 @@ import {
 } from "@material-ui/core";
 import { DndProvider } from "react-dnd";
 import Backend from "react-dnd-html5-backend";
+import DndPersonCard from "./DndPersonCard";
+import update from "immutability-helper";
 
-function MainCard() {
+const style = {
+  width: 400
+};
+
+export interface Item {
+  id: number;
+  text: string;
+}
+
+export interface ContainerState {
+  cards: Item[];
+}
+
+const MainCard: React.FC = () => {
+  const [textField, setTextField] = useState("");
+  const [cards, setCards] = useState([
+    {
+      id: 1,
+      text: "Frai"
+    }
+  ]);
+
+  const moveCard = useCallback(
+    (dragIndex: number, hoverIndex: number) => {
+      const dragCard = cards[dragIndex];
+      setCards(
+        update(cards, {
+          $splice: [
+            [dragIndex, 1],
+            [hoverIndex, 0, dragCard]
+          ]
+        })
+      );
+    },
+    [cards]
+  );
+
+  const renderCard = (card: { id: number; text: string }, index: number) => {
+    return (
+      <DndPersonCard
+        key={card.id}
+        index={index}
+        id={card.id}
+        text={card.text}
+        moveCard={moveCard}
+      />
+    );
+  };
+
   const classes = useStyles();
+
+  const addPerson = () =>
+    setCards([
+      ...cards,
+      ...[{ id: cards[cards.length - 1].id + 1, text: textField }]
+    ]);
+
   return (
     <Card className={classes.root}>
-      <CardContent>
+      <CardContent className={classes.content}>
         <Typography
           className={classes.title}
           color="textSecondary"
@@ -34,19 +90,28 @@ function MainCard() {
                 variant="outlined"
                 label="Enter the name here"
                 className={classes.textField}
+                onChange={e => setTextField(e.target.value)}
               ></TextField>
 
               <Button
                 className={classes.addButton}
                 variant="contained"
                 color="secondary"
+                onClick={addPerson}
               >
                 Add Participant
               </Button>
             </div>
           </Grid>
           <Grid item xs={6}>
-            <DndProvider backend={Backend}>{<DndPeople />}</DndProvider>
+            <DndProvider backend={Backend}>
+              {
+                <div style={style}>
+                  {cards.map((card, i) => renderCard(card, i))}
+                </div>
+                // <DndPeople />
+              }
+            </DndProvider>
           </Grid>
         </Grid>
       </CardContent>
@@ -57,7 +122,7 @@ function MainCard() {
       </CardActions>
     </Card>
   );
-}
+};
 
 const useStyles = makeStyles({
   root: {
@@ -67,6 +132,9 @@ const useStyles = makeStyles({
     maxWidth: "600px",
     width: "90%",
     textAlign: "center"
+  },
+  content: {
+    minHeight: 500
   },
   addPersonWrapper: {
     display: "flex",
