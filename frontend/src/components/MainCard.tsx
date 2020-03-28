@@ -1,6 +1,6 @@
 import React from "react";
 import Button from "@material-ui/core/Button";
-import Example from "./Example";
+import DndPeople from "./DndPeople";
 import {
   Card,
   CardContent,
@@ -35,7 +35,7 @@ function MainCard() {
           {'"a benevolent smile"'}
         </Typography>
 
-        <DndProvider backend={Backend}>{<Example />}</DndProvider>
+        <DndProvider backend={Backend}>{<DndPeople />}</DndProvider>
       </CardContent>
       <CardActions>
         <Button className={classes.button} variant="contained" color="primary">

@@ -5,8 +5,6 @@ import MainCard from "./components/MainCard";
 function App() {
   const classes = useStyles();
 
-  setTimeout(() => alert("EPA!"), 5000);
-
   return <div className={classes.App}>{<MainCard />}</div>;
 }
 
