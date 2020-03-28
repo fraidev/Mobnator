@@ -12,7 +12,6 @@ import {
 } from "@material-ui/core";
 import { DndProvider } from "react-dnd";
 import Backend from "react-dnd-html5-backend";
-import AddBoxOutlinedIcon from "@material-ui/icons/AddSharp";
 
 function MainCard() {
   const classes = useStyles();
@@ -29,19 +28,22 @@ function MainCard() {
 
         <Grid container spacing={3}>
           <Grid item xs={6}>
-            <TextField
-              id="outlined-basic"
-              variant="outlined"
-              label="Enter the name here"
-            ></TextField>
+            <div className={classes.addPersonWrapper}>
+              <TextField
+                size="small"
+                variant="outlined"
+                label="Enter the name here"
+                className={classes.textField}
+              ></TextField>
 
-            <Button
-              className={classes.addButton}
-              variant="contained"
-              color="secondary"
-            >
-              Add Participant
-            </Button>
+              <Button
+                className={classes.addButton}
+                variant="contained"
+                color="secondary"
+              >
+                Add Participant
+              </Button>
+            </div>
           </Grid>
           <Grid item xs={6}>
             <DndProvider backend={Backend}>{<DndPeople />}</DndProvider>
@@ -66,15 +68,20 @@ const useStyles = makeStyles({
     width: "90%",
     textAlign: "center"
   },
-  addBoxIcon: {
-    paddingTop: "20px",
-    fontSize: "30px",
-    color: "primary"
+  addPersonWrapper: {
+    display: "flex",
+    flexWrap: "wrap",
+    maxHeight: "37.5px",
+    width: "100%",
+    alignItems: "center",
+    justifyContent: "center"
   },
+  textField: {},
   addButton: {
-    // marginTop: "2px",
     marginLeft: "5px",
-    height: "54px"
+    height: "39px",
+    color: "white",
+    fontSize: "15px"
   },
   title: {
     fontSize: 35,

@@ -1,7 +1,7 @@
 import React from "react";
 import { makeStyles, createMuiTheme, ThemeProvider } from "@material-ui/core";
 import MainCard from "./components/MainCard";
-import { teal, blue } from "@material-ui/core/colors";
+import { blue } from "@material-ui/core/colors";
 
 function App() {
   const classes = useStyles();
@@ -16,7 +16,9 @@ function App() {
 const theme = createMuiTheme({
   palette: {
     primary: blue,
-    secondary: teal
+    secondary: {
+      main: "#3fb57f"
+    }
   }
 });
 
