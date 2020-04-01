@@ -1,8 +1,6 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef } from "react";
 import Button from "@material-ui/core/Button";
-import { Card, CardContent, Typography, CardActions, makeStyles, Grid, TextField, PropTypes } from "@material-ui/core";
-import CasinoOutlinedIcon from "@material-ui/icons/CasinoOutlined";
-import GroupIcon from "@material-ui/icons/Group";
+import { Card, CardContent, Typography, CardActions, makeStyles, Grid, TextField } from "@material-ui/core";
 import Timer, { TimeRef } from "./Timer";
 import DndPeople, { DndPeopleRef } from "./DndPeople";
 
