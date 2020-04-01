@@ -30,9 +30,14 @@ const MainCard: React.FC = () => {
     timerRef?.current?.startTimer();
   };
 
+  const stopMob = () => {
+    setStarted(!started);
+    timerRef?.current?.stopTimer();
+  };
+
   const button = () => {
     return (started
-      ? <Button className={classes.redButton} variant="contained" onClick={startMob} >
+      ? <Button className={classes.redButton} variant="contained" onClick={stopMob} >
         Stop Mob
       </Button >
       : <Button className={classes.startButton} variant="contained" color="primary" onClick={startMob}>

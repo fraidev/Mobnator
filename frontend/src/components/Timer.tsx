@@ -4,6 +4,7 @@ import ms from "pretty-ms";
 
 export type TimeRef = {
   startTimer: () => void;
+  stopTimer: () => void;
 }
 
 const Timer = forwardRef((props, ref: Ref<TimeRef>) => {
@@ -11,9 +12,13 @@ const Timer = forwardRef((props, ref: Ref<TimeRef>) => {
   const startTimer = () => {
     setState({ time: 1000, start: Date.now() });
   };
+  const stopTimer = () => {
+    setState({ time: 0, start: 0 });
+  };
 
   useImperativeHandle(ref, () => ({
-    startTimer
+    startTimer,
+    stopTimer
   }));
 
   useEffect(() => {
