@@ -16,6 +16,11 @@ export interface ContainerState {
 const MainCard: React.FC = () => {
   const [started, setStarted] = useState(false);
   const [textField, setTextField] = useState("");
+  const [config, setConfig] = useState({
+    roundMinutes: 10,
+    brakeMinutes: 5,
+    roundCount: 6,
+  });
   const dndPeopleRef = useRef<DndPeopleRef>(null);
   const timerRef = useRef<TimeRef>(null);
 
@@ -26,6 +31,8 @@ const MainCard: React.FC = () => {
   };
 
   const startMob = () => {
+    console.log(config);
+
     setStarted(!started);
     timerRef?.current?.startTimer();
   };
@@ -59,10 +66,12 @@ const MainCard: React.FC = () => {
                 variant="outlined"
                 label="Enter the name here"
                 className={classes.textField}
+                disabled={started}
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => setTextField(e.target?.value)}
               ></TextField>
 
-              <Button className={classes.addButton} variant="contained" color="secondary" onClick={addPerson}>
+              <Button className={classes.addButton} variant="contained" color="secondary" onClick={addPerson}
+                disabled={started}>
                 Add Participant
               </Button>
             </div>
@@ -73,8 +82,10 @@ const MainCard: React.FC = () => {
                   className={classes.parametersItems}
                   size="small"
                   variant="outlined"
-                  defaultValue="10"
+                  defaultValue={config.roundMinutes}
                   type="number"
+                  disabled={started}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => setConfig({ ...config, ...{ roundMinutes: parseInt(e.target?.value) } })}
                 ></TextField>
               </Grid>
               <Grid className={classes.parametersGrid} item xs={12}>
@@ -83,8 +94,10 @@ const MainCard: React.FC = () => {
                   className={classes.parametersItems}
                   size="small"
                   variant="outlined"
-                  defaultValue="5"
+                  defaultValue={config.brakeMinutes}
                   type="number"
+                  disabled={started}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => setConfig({ ...config, ...{ brakeMinutes: parseInt(e.target?.value) } })}
                 ></TextField>
               </Grid>
               <Grid className={classes.parametersGrid} item xs={12}>
@@ -93,8 +106,10 @@ const MainCard: React.FC = () => {
                   className={classes.parametersItems}
                   size="small"
                   variant="outlined"
-                  defaultValue="6"
+                  defaultValue={config.roundCount}
                   type="number"
+                  disabled={started}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => setConfig({ ...config, ...{ roundCount: parseInt(e.target?.value) } })}
                 ></TextField>
               </Grid>
               <Grid className={classes.parametersGrid} item xs={12}>
@@ -112,11 +127,11 @@ const MainCard: React.FC = () => {
             <DndPeople ref={dndPeopleRef} />
           </Grid>
         </Grid>
-      </CardContent>
+      </CardContent >
       <CardActions>
         {button()}
       </CardActions>
-    </Card>
+    </Card >
   );
 };
 
