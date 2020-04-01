@@ -13,35 +13,34 @@ export interface ContainerState {
   cards: Item[];
 }
 
+export type ConfigParameters = {
+  roundMinutes: number,
+  brakeMinutes: number,
+  roundCount: number,
+}
+
 const MainCard: React.FC = () => {
   const [started, setStarted] = useState(false);
   const [textField, setTextField] = useState("");
-  const [config, setConfig] = useState({
+  const [config, setConfig] = useState<ConfigParameters>({
     roundMinutes: 10,
     brakeMinutes: 5,
     roundCount: 6,
   });
   const dndPeopleRef = useRef<DndPeopleRef>(null);
   const timerRef = useRef<TimeRef>(null);
-
   const classes = useStyles();
-
   const addPerson = () => {
     dndPeopleRef?.current?.setCard(textField);
   };
-
   const startMob = () => {
-    console.log(config);
-
     setStarted(!started);
-    timerRef?.current?.startTimer();
+    timerRef?.current?.startTimer(config);
   };
-
   const stopMob = () => {
     setStarted(!started);
     timerRef?.current?.stopTimer();
   };
-
   const button = () => {
     return (started
       ? <Button className={classes.redButton} variant="contained" onClick={stopMob} >
@@ -51,6 +50,7 @@ const MainCard: React.FC = () => {
         Start Mob
       </Button>)
   }
+
 
   return (
     <Card className={classes.root}>
@@ -124,7 +124,7 @@ const MainCard: React.FC = () => {
             </div>
           </Grid>
           <Grid item xs={6}>
-            <DndPeople ref={dndPeopleRef} />
+            <DndPeople ref={dndPeopleRef} started={started} />
           </Grid>
         </Grid>
       </CardContent >

@@ -16,6 +16,7 @@ export interface CardProps {
   text: string;
   index: number;
   moveCard: (dragIndex: number, hoverIndex: number) => void;
+  started: boolean;
 }
 
 interface DragItem {
@@ -23,7 +24,7 @@ interface DragItem {
   id: string;
   type: string;
 }
-const DndPersonCard: React.FC<CardProps> = ({ id, text, index, moveCard }) => {
+const DndPersonCard: React.FC<CardProps> = ({ id, text, index, moveCard, started }) => {
   const ref = useRef<HTMLDivElement>(null);
   const [, drop] = useDrop({
     accept: ItemTypes.CARD,
@@ -79,12 +80,16 @@ const DndPersonCard: React.FC<CardProps> = ({ id, text, index, moveCard }) => {
 
   const [{ isDragging }, drag] = useDrag({
     item: { type: ItemTypes.CARD, id, index },
+    canDrag(monitor: any) {
+      return !started;
+    },
     collect: (monitor: any) => ({
       isDragging: monitor.isDragging()
     })
   });
 
   const opacity = isDragging ? 0 : 1;
+
   drag(drop(ref));
   return (
     <div ref={ref} style={{ ...style, opacity }}>
