@@ -1,6 +1,6 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import Button from "@material-ui/core/Button";
-import { Card, CardContent, Typography, CardActions, makeStyles, Grid, TextField } from "@material-ui/core";
+import { Card, CardContent, Typography, CardActions, makeStyles, Grid, TextField, PropTypes } from "@material-ui/core";
 import CasinoOutlinedIcon from "@material-ui/icons/CasinoOutlined";
 import GroupIcon from "@material-ui/icons/Group";
 import Timer, { TimeRef } from "./Timer";
@@ -16,10 +16,10 @@ export interface ContainerState {
 }
 
 const MainCard: React.FC = () => {
+  const [started, setStarted] = useState(false);
   const [textField, setTextField] = useState("");
   const dndPeopleRef = useRef<DndPeopleRef>(null);
   const timerRef = useRef<TimeRef>(null);
-
 
   const classes = useStyles();
 
@@ -28,8 +28,19 @@ const MainCard: React.FC = () => {
   };
 
   const startMob = () => {
+    setStarted(!started);
     timerRef?.current?.startTimer();
   };
+
+  const button = () => {
+    return (started
+      ? <Button className={classes.redButton} variant="contained" onClick={startMob} >
+        Stop Mob
+      </Button >
+      : <Button className={classes.startButton} variant="contained" color="primary" onClick={startMob}>
+        Start Mob
+      </Button>)
+  }
 
   return (
     <Card className={classes.root}>
@@ -84,9 +95,13 @@ const MainCard: React.FC = () => {
                 ></TextField>
               </Grid>
               <Grid className={classes.parametersGrid} item xs={12}>
-                <CasinoOutlinedIcon className={classes.dice}></CasinoOutlinedIcon>
-                <GroupIcon></GroupIcon>
-                <Timer ref={timerRef}></Timer>
+                {/* <CasinoOutlinedIcon className={classes.diceIcon}></CasinoOutlinedIcon>
+                <GroupIcon className={classes.groupIcon}></GroupIcon> */}
+              </Grid>
+              <Grid className={classes.parametersGrid} item xs={12}>
+                <div className={classes.timer} >
+                  <Timer ref={timerRef}></Timer>
+                </div>
               </Grid>
             </div>
           </Grid>
@@ -96,9 +111,7 @@ const MainCard: React.FC = () => {
         </Grid>
       </CardContent>
       <CardActions>
-        <Button className={classes.button} variant="contained" color="primary" onClick={startMob}>
-          Start Mob
-        </Button>
+        {button()}
       </CardActions>
     </Card>
   );
@@ -140,7 +153,7 @@ const useStyles = makeStyles({
   parametersGrid: {
     display: "flex",
     alignItems: "center",
-    justifyContent: "right",
+    justifyContent: "center",
     width: "65px",
     maxHeight: "37.5px",
     marginBottom: "20px",
@@ -174,14 +187,25 @@ const useStyles = makeStyles({
     marginBottom: 12,
   },
   container: {},
-  button: {
+  startButton: {
     alignSelf: "center",
     margin: "0 auto",
   },
-  dice: {
+  redButton: {
+    alignSelf: "center",
+    margin: "0 auto",
+    backgroundColor: "red"
+  },
+  diceIcon: {
     transform: "rotate(30deg)",
     fontSize: "50px",
   },
+  groupIcon: {
+    fontSize: "50px",
+  },
+  timer: {
+    paddingTop: "90px"
+  }
 });
 
 export default MainCard;

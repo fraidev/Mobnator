@@ -32,9 +32,13 @@ const Timer = forwardRef((props, ref: Ref<TimeRef>) => {
 
   return (
     <div>
-      <h1>{timer}</h1>
+      <h1 style={style}>{timer}</h1>
     </div>
   );
 });
+
+const style = {
+  fontSize: 100,
+};
 
 export default Timer;
