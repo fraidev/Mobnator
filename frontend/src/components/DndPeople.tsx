@@ -13,10 +13,6 @@ export type Item = {
   text: string;
 }
 
-type ContainerState = {
-  cards: Item[];
-}
-
 export type DndPeopleRef = {
   setCard: (text: string) => void;
 }

@@ -8,11 +8,6 @@ export interface Item {
   id: number;
   text: string;
 }
-
-export interface ContainerState {
-  cards: Item[];
-}
-
 export type ConfigParameters = {
   roundMinutes: number,
   brakeMinutes: number,
