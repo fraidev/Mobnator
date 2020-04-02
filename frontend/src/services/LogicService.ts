@@ -1,41 +1,51 @@
-const state: stateType = {
+let state: stateType = {
     people: [],
     driver: null,
-    navigator: null,
-    lastId: 0
+    navigator: null
 }
-export type People = {
+export type Person = {
     id: number,
     name: string
 }
 
 export type stateType = {
-    lastId: number,
-    people: People[];
-    driver: People | null;
-    navigator: People | null;
+    people: Person[];
+    driver: Person | null;
+    navigator: Person | null;
 }
 
-const addPerson = (name: string) => {
-    state.lastId++;
-
-    state.people.push({ id: state.lastId, name: name })
+const saveState = () => {
+    window.localStorage.setItem('MobsterState', JSON.stringify(state));
 }
 
-const setPeople = (people: People[]) => {
-    state.lastId++;
+const addPerson = (person: Person) => {
+    state.people.push(person);
+    saveState();
+}
 
+const setPeople = (people: Person[]) => {
     state.people = people;
+    saveState();
 }
 
 const getPeople = () => {
     return state.people;
 }
 
+const init = () => {
+    let mobsterStateJson = window.localStorage.getItem('MobsterState');
+    if (mobsterStateJson != null) {
+        state = JSON.parse(mobsterStateJson) as stateType;
+    }
+}
+init();
+
 const LogicService = {
+    init,
     getPeople,
     addPerson,
-    setPeople
+    setPeople,
+    state
 }
 
 export default LogicService;

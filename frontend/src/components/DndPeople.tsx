@@ -1,8 +1,9 @@
-import React, { useState, useCallback, useImperativeHandle, forwardRef, Ref } from "react";
+import React, { useCallback, useImperativeHandle, forwardRef, Ref, useState } from "react";
 import { DndProvider } from "react-dnd";
 import Backend from "react-dnd-html5-backend";
 import DndPersonCard from "./DndPersonCard";
 import update from "immutability-helper";
+import LogicService, { Person } from "../services/LogicService";
 
 const style = {
   width: 400
@@ -18,43 +19,41 @@ export type DndPeopleRef = {
 }
 
 const DndPeople = forwardRef((prop: { started: boolean }, ref: Ref<DndPeopleRef>) => {
-  const [cards, setCards] = useState([
-    {
-      id: 1,
-      text: "Frai",
-    },
-  ]);
+  const [people, setPeople] = useState<Person[]>(LogicService.getPeople());
 
-  const setCard = (text: string) => {
-    setCards([...cards, ...[{ id: cards[cards.length - 1].id + 1, text: text }]]);
+  const setCard = (name: string) => {
+    let p = { id: people.length + 1, name: name };
+    setPeople([...people, ...[p]]);
+    LogicService.addPerson(p);
   }
 
   useImperativeHandle(ref, () => ({
     setCard
   }));
 
-
   const moveCard = useCallback(
     (dragIndex: number, hoverIndex: number) => {
-      const dragCard = cards[dragIndex];
-      setCards(
-        update(cards, {
-          $splice: [
-            [dragIndex, 1],
-            [hoverIndex, 0, dragCard],
-          ],
-        })
-      );
+      const dragCard = people[dragIndex];
+      let p = update(people, {
+        $splice: [
+          [dragIndex, 1],
+          [hoverIndex, 0, dragCard],
+        ],
+      });
+      setPeople(p);
+      LogicService.setPeople(p);
     },
-    [cards]
+    [people]
   );
 
-  const renderCard = (card: { id: number; text: string }, index: number) => {
-    return <DndPersonCard key={card.id} index={index} id={card.id} text={card.text} moveCard={moveCard} started={prop.started} />;
+  const renderCard = (person: Person, index: number) => {
+    return <DndPersonCard key={person.id} index={index} id={person.id}
+      text={person.name} moveCard={moveCard} started={prop.started} />;
   };
+
   return <DndProvider backend={Backend}>{
     <div style={style}>
-      {cards.map((card, i) => renderCard(card, i))}
+      {people.map((person, i) => renderCard(person, i))}
     </div>
   }</DndProvider>;
 });

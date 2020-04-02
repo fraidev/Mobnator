@@ -3,6 +3,7 @@ import Button from "@material-ui/core/Button";
 import { Card, CardContent, Typography, CardActions, makeStyles, Grid, TextField } from "@material-ui/core";
 import Timer, { TimeRef } from "./Timer";
 import DndPeople, { DndPeopleRef } from "./DndPeople";
+import LogicService from "../services/LogicService";
 
 export interface Item {
   id: number;
@@ -15,6 +16,7 @@ export type ConfigParameters = {
 }
 
 const MainCard: React.FC = () => {
+  const [loaded, setLoaded] = useState(false);
   const [started, setStarted] = useState(false);
   const [textField, setTextField] = useState("");
   const [config, setConfig] = useState<ConfigParameters>({
@@ -22,6 +24,13 @@ const MainCard: React.FC = () => {
     brakeMinutes: 5,
     roundCount: 6,
   });
+
+  if (!loaded) {
+    setLoaded(true);
+  }
+
+
+
   const dndPeopleRef = useRef<DndPeopleRef>(null);
   const timerRef = useRef<TimeRef>(null);
   const classes = useStyles();
