@@ -19,6 +19,11 @@ export type DndPeopleRef = {
   setCard: (text: string) => void;
 }
 
+type RightCommandTypes = {
+  command: 'navigator' | 'driver' | 'remove';
+  target: any;
+}
+
 const DndPeople = forwardRef((prop: { started: boolean }, ref: Ref<DndPeopleRef>) => {
   const [people, setPeople] = useState<Person[]>(LogicService.getPeople());
 
@@ -32,8 +37,19 @@ const DndPeople = forwardRef((prop: { started: boolean }, ref: Ref<DndPeopleRef>
     setCard
   }));
 
-  const handleClick = (e: any, data: any) => {
-    console.log(data.foo);
+  const handleClick = (e: any, data: RightCommandTypes) => {
+    if (data.command === 'navigator') {
+
+    }
+    if (data.command === 'driver') {
+
+    }
+    if (data.command === 'remove') {
+      console.log(data.target.innerText)
+      const p = people.filter(x => x.name !== data.target.innerText);
+      setPeople(p);
+      LogicService.setPeople(p);
+    }
   }
 
   const moveCard = useCallback(
@@ -63,16 +79,16 @@ const DndPeople = forwardRef((prop: { started: boolean }, ref: Ref<DndPeopleRef>
     if (!prop.started)
       return (
         <ContextMenu id="same_unique_identifier">
-          <MenuItem data={{ foo: 'bar' }} onClick={handleClick}>
+          <MenuItem data={{ command: 'navigator' }} onClick={handleClick}>
             Navigator
-        </MenuItem>
-          <MenuItem data={{ foo: 'bar' }} onClick={handleClick}>
+          </MenuItem>
+          <MenuItem data={{ command: 'driver' }} onClick={handleClick}>
             Driver
           </MenuItem>
           <MenuItem divider />
-          <MenuItem data={{ foo: 'bar' }} onClick={handleClick}>
+          <MenuItem data={{ command: 'remove' }} onClick={handleClick}>
             Remove
-        </MenuItem>
+          </MenuItem>
         </ContextMenu>)
   }
 
