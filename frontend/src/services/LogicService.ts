@@ -4,7 +4,7 @@ let state: stateType = {
     navigator: null
 }
 export type Person = {
-    id: number,
+    id: string,
     name: string
 }
 

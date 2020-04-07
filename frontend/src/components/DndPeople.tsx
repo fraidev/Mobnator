@@ -5,6 +5,7 @@ import DndPersonCard from "./DndPersonCard";
 import update from "immutability-helper";
 import LogicService, { Person } from "../services/LogicService";
 import { ContextMenu, MenuItem, ContextMenuTrigger } from "react-contextmenu";
+import { v4 as uuidV4 } from 'uuid';
 
 const style = {
   width: 400
@@ -28,7 +29,7 @@ const DndPeople = forwardRef((prop: { started: boolean }, ref: Ref<DndPeopleRef>
   const [people, setPeople] = useState<Person[]>(LogicService.getPeople());
 
   const setCard = (name: string) => {
-    let p = { id: people.length + 1, name: name };
+    let p = { id: uuidV4(), name: name };
     setPeople([...people, ...[p]]);
     LogicService.addPerson(p);
   }
