@@ -79,13 +79,11 @@ const DndPeople = forwardRef((prop: { started: boolean }, ref: Ref<DndPeopleRef>
 
   const renderCard = (person: Person, index: number) => {
     return (
-      <div>
+      <ContextMenuTrigger key={person.id} id={index.toString()} holdToDisplay={1000}>
         {rightClickMenu(person, index)}
-        <ContextMenuTrigger key={person.id} id={index.toString()} holdToDisplay={1000}>
-          <DndPersonCard index={index} id={person.id}
-            person={person} moveCard={moveCard} started={prop.started} />
-        </ContextMenuTrigger>
-      </div>
+        <DndPersonCard index={index} id={person.id}
+          person={person} moveCard={moveCard} started={prop.started} />
+      </ContextMenuTrigger>
     );
   };
 
