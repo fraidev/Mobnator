@@ -23,6 +23,11 @@ const Timer = forwardRef((props, ref: Ref<TimeRef>) => {
         setState({ ...state, ...{ time: state.time - 1000 } });
       }
     }, 1000);
+
+    if (state.time > 0) {
+      document.title = ms(state.time, { colonNotation: true, secondsDecimalDigits: 0 });
+    }
+
     return () => clearInterval(intervalId);
   }, [state]);
 

@@ -7,14 +7,6 @@ import DriveEtaIcon from '@material-ui/icons/DriveEta';
 import MapIcon from '@material-ui/icons/Map';
 
 
-const style = {
-  border: "1px dashed gray",
-  padding: "0.5rem 1rem",
-  marginBottom: ".5rem",
-  backgroundColor: "white",
-  cursor: "move"
-};
-
 export interface CardProps {
   id: any;
   person: Person;
@@ -23,11 +15,12 @@ export interface CardProps {
   started: boolean;
 }
 
-interface DragItem {
+type DragItem = {
   index: number;
   id: string;
   type: string;
 }
+
 const DndPersonCard: React.FC<CardProps> = ({ id, person, index, moveCard, started }) => {
   const ref = useRef<HTMLDivElement>(null);
   const [, drop] = useDrop({
@@ -105,3 +98,11 @@ const DndPersonCard: React.FC<CardProps> = ({ id, person, index, moveCard, start
 };
 
 export default DndPersonCard;
+
+const style = {
+  border: "1px dashed gray",
+  padding: "0.5rem 1rem",
+  marginBottom: ".5rem",
+  backgroundColor: "white",
+  cursor: "move"
+};

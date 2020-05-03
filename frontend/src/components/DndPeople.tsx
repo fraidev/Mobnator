@@ -1,4 +1,4 @@
-import React, { useCallback, useImperativeHandle, forwardRef, Ref, useState, useEffect } from "react";
+import React, { useCallback, useImperativeHandle, forwardRef, Ref, useState } from "react";
 import { DndProvider } from "react-dnd";
 import Backend from "react-dnd-html5-backend";
 import DndPersonCard from "./DndPersonCard";

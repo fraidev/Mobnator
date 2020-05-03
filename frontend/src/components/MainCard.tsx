@@ -34,14 +34,19 @@ const MainCard: React.FC = () => {
   const addPerson = () => {
     dndPeopleRef?.current?.setCard(textField);
   };
+
   const startMob = () => {
     setStarted(!started);
     timerRef?.current?.startTimer(config);
   };
+
   const stopMob = () => {
     setStarted(!started);
     timerRef?.current?.stopTimer();
   };
+
+  
+
   const button = () => {
     return (started
       ? <Button className={classes.redButton} variant="contained" onClick={stopMob} >
@@ -51,7 +56,6 @@ const MainCard: React.FC = () => {
         Start Mob
       </Button>)
   }
-
 
   return (
     <Card className={classes.root}>
