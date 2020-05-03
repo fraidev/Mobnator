@@ -2,6 +2,10 @@ import React, { useRef } from "react";
 import { useDrag, useDrop, DropTargetMonitor } from "react-dnd";
 import { XYCoord } from "dnd-core";
 import ItemTypes from "./item-types";
+import { Person } from "../services/LogicService";
+import DriveEtaIcon from '@material-ui/icons/DriveEta';
+import MapIcon from '@material-ui/icons/Map';
+
 
 const style = {
   border: "1px dashed gray",
@@ -13,7 +17,7 @@ const style = {
 
 export interface CardProps {
   id: any;
-  text: string;
+  person: Person;
   index: number;
   moveCard: (dragIndex: number, hoverIndex: number) => void;
   started: boolean;
@@ -24,7 +28,7 @@ interface DragItem {
   id: string;
   type: string;
 }
-const DndPersonCard: React.FC<CardProps> = ({ id, text, index, moveCard, started }) => {
+const DndPersonCard: React.FC<CardProps> = ({ id, person, index, moveCard, started }) => {
   const ref = useRef<HTMLDivElement>(null);
   const [, drop] = useDrop({
     accept: ItemTypes.CARD,
@@ -93,7 +97,9 @@ const DndPersonCard: React.FC<CardProps> = ({ id, text, index, moveCard, started
   drag(drop(ref));
   return (
     <div ref={ref} style={{ ...style, opacity }}>
-      {text}
+      {person.isDriver ? <DriveEtaIcon /> : ""}
+      {person.isNavigator ? <MapIcon /> : ""}
+      {person.name}
     </div>
   );
 };

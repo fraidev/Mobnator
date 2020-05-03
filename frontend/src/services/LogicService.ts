@@ -5,7 +5,9 @@ let state: stateType = {
 }
 export type Person = {
     id: string,
-    name: string
+    name: string,
+    isDriver: boolean,
+    isNavigator: boolean
 }
 
 export type stateType = {

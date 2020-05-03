@@ -1,4 +1,4 @@
-import React, { useCallback, useImperativeHandle, forwardRef, Ref, useState } from "react";
+import React, { useCallback, useImperativeHandle, forwardRef, Ref, useState, useEffect } from "react";
 import { DndProvider } from "react-dnd";
 import Backend from "react-dnd-html5-backend";
 import DndPersonCard from "./DndPersonCard";
@@ -22,6 +22,8 @@ export type DndPeopleRef = {
 
 type RightCommandTypes = {
   command: 'navigator' | 'driver' | 'remove';
+  index: number;
+  person: Person;
   target: any;
 }
 
@@ -29,7 +31,7 @@ const DndPeople = forwardRef((prop: { started: boolean }, ref: Ref<DndPeopleRef>
   const [people, setPeople] = useState<Person[]>(LogicService.getPeople());
 
   const setCard = (name: string) => {
-    let p = { id: uuidV4(), name: name };
+    let p = { id: uuidV4(), name: name, isDriver: false, isNavigator: false };
     setPeople([...people, ...[p]]);
     LogicService.addPerson(p);
   }
@@ -39,15 +41,22 @@ const DndPeople = forwardRef((prop: { started: boolean }, ref: Ref<DndPeopleRef>
   }));
 
   const handleClick = (e: any, data: RightCommandTypes) => {
+    console.log(data);
     if (data.command === 'navigator') {
-
+      people[data.index].isNavigator = true;
+      let p = [...people];
+      setPeople(p);
+      LogicService.setPeople(p);
     }
     if (data.command === 'driver') {
-
+      people[data.index].isDriver = true;
+      let p = [...people];
+      setPeople(p);
+      LogicService.setPeople(p);
     }
     if (data.command === 'remove') {
       console.log(data.target.innerText)
-      const p = people.filter(x => x.name !== data.target.innerText);
+      const p = people.filter(x => x.id !== data.person.id);
       setPeople(p);
       LogicService.setPeople(p);
     }
@@ -69,25 +78,29 @@ const DndPeople = forwardRef((prop: { started: boolean }, ref: Ref<DndPeopleRef>
   );
 
   const renderCard = (person: Person, index: number) => {
-    return (<ContextMenuTrigger key={person.id} id="same_unique_identifier" holdToDisplay={1000}>
-      <DndPersonCard index={index} id={person.id}
-        text={person.name} moveCard={moveCard} started={prop.started} />
-    </ContextMenuTrigger>
+    return (
+      <div>
+        {rightClickMenu(person, index)}
+        <ContextMenuTrigger key={person.id} id={index.toString()} holdToDisplay={1000}>
+          <DndPersonCard index={index} id={person.id}
+            person={person} moveCard={moveCard} started={prop.started} />
+        </ContextMenuTrigger>
+      </div>
     );
   };
 
-  const rightClickMenu = () => {
+  const rightClickMenu = (person: Person, index: number) => {
     if (!prop.started)
       return (
-        <ContextMenu id="same_unique_identifier">
-          <MenuItem data={{ command: 'navigator' }} onClick={handleClick}>
+        <ContextMenu id={index.toString()}>
+          <MenuItem data={{ command: 'navigator', person: person, index: index }} onClick={handleClick}>
             Navigator
           </MenuItem>
-          <MenuItem data={{ command: 'driver' }} onClick={handleClick}>
+          <MenuItem data={{ command: 'driver', person: person, index: index }} onClick={handleClick}>
             Driver
           </MenuItem>
           <MenuItem divider />
-          <MenuItem data={{ command: 'remove' }} onClick={handleClick}>
+          <MenuItem data={{ command: 'remove', person: person, index: index }} onClick={handleClick}>
             Remove
           </MenuItem>
         </ContextMenu>)
@@ -95,9 +108,7 @@ const DndPeople = forwardRef((prop: { started: boolean }, ref: Ref<DndPeopleRef>
 
   return <DndProvider backend={Backend}>{
     <div style={style}>
-      {rightClickMenu()}
-
-      {people.map((person, i) => renderCard(person, i))}
+      {people.map((person, index) => renderCard(person, index))}
     </div>
   }</DndProvider>;
 });
