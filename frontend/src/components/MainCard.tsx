@@ -45,7 +45,7 @@ const MainCard: React.FC = () => {
     timerRef?.current?.stopTimer();
   };
 
-  
+
 
   const button = () => {
     return (started
@@ -73,6 +73,7 @@ const MainCard: React.FC = () => {
                 className={classes.textField}
                 disabled={started}
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => setTextField(e.target?.value)}
+                onKeyDown={(e) => e.key === 'Enter' && addPerson()}
               ></TextField>
 
               <Button className={classes.addButton} variant="contained" color="secondary" onClick={addPerson}
