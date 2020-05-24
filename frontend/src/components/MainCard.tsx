@@ -82,7 +82,7 @@ const MainCard: React.FC = () => {
               </Button>
             </div>
             <div className={classes.parameters}>
-              <Grid className={classes.parametersGrid} item xs={12}>
+              {<Grid className={classes.parametersGrid} item xs={12}>
                 <span className={classes.parametersLabel}>Duração da rodada em minutos:</span>
                 <TextField
                   className={classes.parametersItems}
@@ -94,7 +94,7 @@ const MainCard: React.FC = () => {
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) => setConfig({ ...config, ...{ roundMinutes: parseInt(e.target?.value) } })}
                 ></TextField>
               </Grid>
-              <Grid className={classes.parametersGrid} item xs={12}>
+             /*  <Grid className={classes.parametersGrid} item xs={12}>
                 <span className={classes.parametersLabel}>Duração do intervalo em minutos:</span>
                 <TextField
                   className={classes.parametersItems}
@@ -105,8 +105,8 @@ const MainCard: React.FC = () => {
                   disabled={started}
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) => setConfig({ ...config, ...{ brakeMinutes: parseInt(e.target?.value) } })}
                 ></TextField>
-              </Grid>
-              <Grid className={classes.parametersGrid} item xs={12}>
+              </Grid> */}
+              {/* <Grid className={classes.parametersGrid} item xs={12}>
                 <span className={classes.parametersLabel}>Intervalo inicia após (quantidade de rodadas):</span>
                 <TextField
                   className={classes.parametersItems}
@@ -117,7 +117,7 @@ const MainCard: React.FC = () => {
                   disabled={started}
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) => setConfig({ ...config, ...{ roundCount: parseInt(e.target?.value) } })}
                 ></TextField>
-              </Grid>
+              </Grid> */}
               <Grid className={classes.parametersGrid} item xs={12}>
                 {/* <CasinoOutlinedIcon className={classes.diceIcon}></CasinoOutlinedIcon>
                 <GroupIcon className={classes.groupIcon}></GroupIcon> */}

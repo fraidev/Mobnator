@@ -1,4 +1,4 @@
-import React, { useCallback, useImperativeHandle, forwardRef, Ref, useState } from "react";
+import React, { useCallback, useImperativeHandle, forwardRef, Ref, useState, useEffect } from "react";
 import { DndProvider } from "react-dnd";
 import Backend from "react-dnd-html5-backend";
 import DndPersonCard from "./DndPersonCard";
@@ -40,20 +40,28 @@ const DndPeople = forwardRef((prop: { started: boolean }, ref: Ref<DndPeopleRef>
     setCard
   }));
 
+  // useEffect(() => {
+
+  //   setPeople(people);
+
+  //   console.log(people)
+
+  // }, [people])
+
   const handleClick = (e: any, data: RightCommandTypes) => {
     console.log(data);
-    if (data.command === 'navigator') {
-      people[data.index].isNavigator = true;
-      let p = [...people];
-      setPeople(p);
-      LogicService.setPeople(p);
-    }
-    if (data.command === 'driver') {
-      people[data.index].isDriver = true;
-      let p = [...people];
-      setPeople(p);
-      LogicService.setPeople(p);
-    }
+    // if (data.command === 'navigator') {
+    //   people[data.index].isNavigator = true;
+    //   let p = [...people];
+    //   setPeople(p);
+    //   LogicService.setPeople(p);
+    // }
+    // if (data.command === 'driver') {
+    //   people[data.index].isDriver = true;
+    //   let p = [...people];
+    //   setPeople(p);
+    //   LogicService.setPeople(p);
+    // }
     if (data.command === 'remove') {
       console.log(data.target.innerText)
       const p = people.filter(x => x.id !== data.person.id);
@@ -71,6 +79,17 @@ const DndPeople = forwardRef((prop: { started: boolean }, ref: Ref<DndPeopleRef>
           [hoverIndex, 0, dragCard],
         ],
       });
+
+
+      p.forEach(x => {
+        x.isDriver = false;
+        x.isNavigator = false;
+      });
+
+
+      p[0].isDriver = true;
+      p[1].isNavigator = true;
+
       setPeople(p);
       LogicService.setPeople(p);
     },
@@ -91,13 +110,13 @@ const DndPeople = forwardRef((prop: { started: boolean }, ref: Ref<DndPeopleRef>
     if (!prop.started)
       return (
         <ContextMenu id={index.toString()}>
-          <MenuItem data={{ command: 'navigator', person: person, index: index }} onClick={handleClick}>
+          {/* <MenuItem data={{ command: 'navigator', person: person, index: index }} onClick={handleClick}>
             Navigator
           </MenuItem>
           <MenuItem data={{ command: 'driver', person: person, index: index }} onClick={handleClick}>
             Driver
-          </MenuItem>
-          <MenuItem divider />
+          </MenuItem> */}
+          {/* <MenuItem divider /> */}
           <MenuItem data={{ command: 'remove', person: person, index: index }} onClick={handleClick}>
             Remove
           </MenuItem>
