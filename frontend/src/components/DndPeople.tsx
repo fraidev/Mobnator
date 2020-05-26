@@ -1,4 +1,4 @@
-import React, { useCallback, useImperativeHandle, forwardRef, Ref, useState, useEffect } from "react";
+import React, { useCallback, useImperativeHandle, forwardRef, Ref, useState } from "react";
 import { DndProvider } from "react-dnd";
 import Backend from "react-dnd-html5-backend";
 import DndPersonCard from "./DndPersonCard";
@@ -18,6 +18,7 @@ export type Item = {
 
 export type DndPeopleRef = {
   setCard: (text: string) => void;
+  roll: () => void;
 }
 
 type RightCommandTypes = {
@@ -36,8 +37,16 @@ const DndPeople = forwardRef((prop: { started: boolean }, ref: Ref<DndPeopleRef>
     LogicService.addPerson(p);
   }
 
+  const roll = () => {
+    let firstPerson = people.shift();
+    people.push(firstPerson!);
+
+    setPeople([...people]);
+  };
+
   useImperativeHandle(ref, () => ({
-    setCard
+    setCard,
+    roll
   }));
 
   // useEffect(() => {

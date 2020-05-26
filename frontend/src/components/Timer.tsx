@@ -6,22 +6,34 @@ import { ConfigParameters } from "./MainCard";
 export type TimeRef = {
   startTimer: (config: ConfigParameters) => void;
   stopTimer: () => void;
+  continueTimer: () => void;
 }
 
-const Timer = forwardRef((props, ref: Ref<TimeRef>) => {
+const Timer = forwardRef((props: { onFinish: () => void }, ref: Ref<TimeRef>) => {
+  const [started, setStarted] = useState(false);
   const [state, setState] = useState({ time: 0, start: 0 });
   const startTimer = (config: ConfigParameters) => {
+    setStarted(true);
     setState({ time: config.roundMinutes * 60000, start: Date.now() });
   };
   const stopTimer = () => {
-    setState({ time: 0, start: 0 });
+    setStarted(false);
+  };
+  const continueTimer = () => {
+    setStarted(true);
+    setState({ time: state.time, start: state.start });
   };
 
   useEffect(() => {
     const intervalId = setTimeout(() => {
-      if (state.time >= 0) {
+      if (state.time >= 0 && started) {
         setState({ ...state, ...{ time: state.time - 1000 } });
       }
+      if (state.time < 0 && started) {
+        props.onFinish();
+      }
+
+
     }, 1000);
 
     if (state.time > 0) {
@@ -33,7 +45,8 @@ const Timer = forwardRef((props, ref: Ref<TimeRef>) => {
 
   useImperativeHandle(ref, () => ({
     startTimer,
-    stopTimer
+    stopTimer,
+    continueTimer
   }));
 
   const timer =

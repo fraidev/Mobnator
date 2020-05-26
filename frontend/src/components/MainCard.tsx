@@ -17,6 +17,7 @@ export type ConfigParameters = {
 const MainCard: React.FC = () => {
   const [loaded, setLoaded] = useState(false);
   const [started, setStarted] = useState(false);
+  const [firstStarted, setFirstStarted] = useState(false);
   const [textField, setTextField] = useState("");
   const [config, setConfig] = useState<ConfigParameters>({
     roundMinutes: 10,
@@ -37,7 +38,13 @@ const MainCard: React.FC = () => {
 
   const startMob = () => {
     setStarted(!started);
-    timerRef?.current?.startTimer(config);
+    if (firstStarted) {
+      timerRef?.current?.continueTimer()
+    } else {
+      timerRef?.current?.startTimer(config);
+
+    }
+    setFirstStarted(true);
   };
 
   const stopMob = () => {
@@ -45,11 +52,15 @@ const MainCard: React.FC = () => {
     timerRef?.current?.stopTimer();
   };
 
+  const onFinish = () => {
+    dndPeopleRef?.current?.roll();
+  };
 
 
   const button = () => {
     return (started
-      ? <Button className={classes.redButton} variant="contained" onClick={stopMob} >
+      ?
+      <Button className={classes.redButton} variant="contained" onClick={stopMob} >
         Stop Mob
       </Button >
       : <Button className={classes.startButton} variant="contained" color="primary" onClick={startMob}>
@@ -124,7 +135,7 @@ const MainCard: React.FC = () => {
               </Grid>
               <Grid className={classes.parametersGrid} item xs={12}>
                 <div className={classes.timer} >
-                  <Timer ref={timerRef}></Timer>
+                  <Timer ref={timerRef} onFinish={onFinish}></Timer>
                 </div>
               </Grid>
             </div>
