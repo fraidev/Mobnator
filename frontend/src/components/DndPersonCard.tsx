@@ -2,9 +2,9 @@ import React, { useRef } from "react";
 import { useDrag, useDrop, DropTargetMonitor } from "react-dnd";
 import { XYCoord } from "dnd-core";
 import ItemTypes from "./item-types";
-import { Person } from "../services/LogicService";
 import DriveEtaIcon from '@material-ui/icons/DriveEta';
 import MapIcon from '@material-ui/icons/Map';
+import { Person } from "../models/types";
 
 
 export interface CardProps {

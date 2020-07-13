@@ -1,39 +1,32 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useContext, useEffect } from "react";
 import Button from "@material-ui/core/Button";
 import { Card, CardContent, Typography, CardActions, makeStyles, Grid, TextField } from "@material-ui/core";
 import Timer, { TimeRef } from "./Timer";
-import DndPeople, { DndPeopleRef } from "./DndPeople";
+import DndPeople from "./DndPeople";
+import { StateContext } from "../services/StateStore";
+import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
+import GroupIcon from '@material-ui/icons/Group';
 
 export interface Item {
   id: number;
   text: string;
 }
-export type ConfigParameters = {
-  roundMinutes: number,
-  brakeMinutes: number,
-  roundCount: number,
-}
 
 const MainCard: React.FC = () => {
-  const [loaded, setLoaded] = useState(false);
+  const { state, dispatch } = useContext(StateContext);
   const [started, setStarted] = useState(false);
   const [firstStarted, setFirstStarted] = useState(false);
   const [textField, setTextField] = useState("");
-  const [config, setConfig] = useState<ConfigParameters>({
-    roundMinutes: 10,
-    brakeMinutes: 5,
-    roundCount: 6,
-  });
 
-  if (!loaded) {
-    setLoaded(true);
-  }
-
-  const dndPeopleRef = useRef<DndPeopleRef>(null);
   const timerRef = useRef<TimeRef>(null);
   const classes = useStyles();
+
+  useEffect(() => {
+    dispatch({ type: 'SYNC', payload: null })
+  }, [dispatch])
+
   const addPerson = () => {
-    dndPeopleRef?.current?.setCard(textField);
+    dispatch({ type: 'ADD_PERSON', payload: textField });
   };
 
   const startMob = () => {
@@ -41,7 +34,7 @@ const MainCard: React.FC = () => {
     if (firstStarted) {
       timerRef?.current?.continueTimer()
     } else {
-      timerRef?.current?.startTimer(config);
+      timerRef?.current?.startTimer(state.config);
 
     }
     setFirstStarted(true);
@@ -53,14 +46,14 @@ const MainCard: React.FC = () => {
   };
 
   const onFinish = () => {
-    dndPeopleRef?.current?.roll();
+    dispatch({ type: 'ROLL_PEOPLE', payload: null })
+    timerRef?.current?.startTimer(state.config);
   };
 
 
   const button = () => {
     return (started
-      ?
-      <Button className={classes.redButton} variant="contained" onClick={stopMob} >
+      ? <Button className={classes.redButton} variant="contained" onClick={stopMob} >
         Stop Mob
       </Button >
       : <Button className={classes.startButton} variant="contained" color="primary" onClick={startMob}>
@@ -93,60 +86,71 @@ const MainCard: React.FC = () => {
               </Button>
             </div>
             <div className={classes.parameters}>
-              {<Grid className={classes.parametersGrid} item xs={12}>
+              <Grid className={classes.parametersGrid} item xs={12}>
                 <span className={classes.parametersLabel}>Duração da rodada em minutos:</span>
                 <TextField
                   className={classes.parametersItems}
                   size="small"
                   variant="outlined"
-                  defaultValue={config.roundMinutes}
+                  defaultValue={state.config.roundMinutes}
                   type="number"
                   disabled={started}
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => setConfig({ ...config, ...{ roundMinutes: parseInt(e.target?.value) } })}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => dispatch({ type: 'SET_CONFIG_ROUND_MINUTES', payload: e.target?.value })}
                 ></TextField>
               </Grid>
-             /*  <Grid className={classes.parametersGrid} item xs={12}>
+              <Grid className={classes.parametersGrid} item xs={12}>
                 <span className={classes.parametersLabel}>Duração do intervalo em minutos:</span>
                 <TextField
                   className={classes.parametersItems}
                   size="small"
                   variant="outlined"
-                  defaultValue={config.brakeMinutes}
+                  defaultValue={state.config.breakMinutes}
                   type="number"
                   disabled={started}
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => setConfig({ ...config, ...{ brakeMinutes: parseInt(e.target?.value) } })}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => dispatch({ type: 'SET_CONFIG_BREAK_MINUTES', payload: e.target?.value })}
                 ></TextField>
-              </Grid> */}
-              {/* <Grid className={classes.parametersGrid} item xs={12}>
+              </Grid>
+              <Grid className={classes.parametersGrid} item xs={12}>
                 <span className={classes.parametersLabel}>Intervalo inicia após (quantidade de rodadas):</span>
                 <TextField
                   className={classes.parametersItems}
                   size="small"
                   variant="outlined"
-                  defaultValue={config.roundCount}
+                  defaultValue={state.config.roundCount}
                   type="number"
                   disabled={started}
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => setConfig({ ...config, ...{ roundCount: parseInt(e.target?.value) } })}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => dispatch({ type: 'SET_CONFIG_ROUND_COUNT', payload: e.target?.value })}
                 ></TextField>
+              </Grid>
+              <Grid className={classes.parametersGrid + " " + classes.timer} item xs={12}>
+                <Timer ref={timerRef} onFinish={onFinish}></Timer>
+              </Grid>
+              <Grid className={classes.timerText} item xs={12}>
+                {/* <CasinoOutlinedIcon className={classes.diceIcon}></CasinoOutlinedIcon>*/}
+                <div>Paused</div>
+                <div>Working</div>
+                <div>Break Time</div>
+              </Grid>
+              {/* <Grid className={classes.parametersGrid} item xs={12}>
+                <GroupIcon className={classes.groupIcon}></GroupIcon>
               </Grid> */}
-              <Grid className={classes.parametersGrid} item xs={12}>
-                {/* <CasinoOutlinedIcon className={classes.diceIcon}></CasinoOutlinedIcon>
-                <GroupIcon className={classes.groupIcon}></GroupIcon> */}
-              </Grid>
-              <Grid className={classes.parametersGrid} item xs={12}>
-                <div className={classes.timer} >
-                  <Timer ref={timerRef} onFinish={onFinish}></Timer>
-                </div>
-              </Grid>
             </div>
           </Grid>
           <Grid item xs={6}>
-            <DndPeople ref={dndPeopleRef} started={started} />
+            <DndPeople />
           </Grid>
         </Grid>
       </CardContent >
       <CardActions>
-        {button()}
+        <Grid item xs={1}>
+          <GroupIcon className={classes.groupIcon}></GroupIcon>
+        </Grid>
+        <Grid item xs={10}>
+          {button()}
+        </Grid>
+        <Grid item xs={1}>
+          {<DeleteForeverIcon className={classes.groupIcon} />}
+        </Grid>
       </CardActions>
     </Card >
   );
@@ -223,10 +227,12 @@ const useStyles = makeStyles({
   },
   container: {},
   startButton: {
+    marginBottom: "10px",
     alignSelf: "center",
     margin: "0 auto",
   },
   redButton: {
+    marginBottom: "10px",
     alignSelf: "center",
     margin: "0 auto",
     backgroundColor: "red"
@@ -236,10 +242,13 @@ const useStyles = makeStyles({
     fontSize: "50px",
   },
   groupIcon: {
-    fontSize: "50px",
+    fontSize: "30px",
   },
   timer: {
-    paddingTop: "90px"
+    paddingTop: "70px"
+  },
+  timerText: {
+    paddingTop: "30px"
   }
 });
 

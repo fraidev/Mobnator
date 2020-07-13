@@ -1,53 +1,19 @@
-let state: stateType = {
-    people: [],
-    driver: null,
-    navigator: null
-}
-export type Person = {
-    id: string,
-    name: string,
-    isDriver: boolean,
-    isNavigator: boolean
-}
+import { GlobalState } from "../models/types";
 
-export type stateType = {
-    people: Person[];
-    driver: Person | null;
-    navigator: Person | null;
+const saveGlobalState = (state: GlobalState) => {
+    return window.localStorage.setItem('MobsterState', JSON.stringify(state));
 }
-
-const saveState = () => {
-    window.localStorage.setItem('MobsterState', JSON.stringify(state));
-}
-
-const addPerson = (person: Person) => {
-    state.people.push(person);
-    saveState();
-}
-
-const setPeople = (people: Person[]) => {
-    state.people = people;
-    saveState();
-}
-
-const getPeople = () => {
-    return state.people;
-}
-
-const init = () => {
-    let mobsterStateJson = window.localStorage.getItem('MobsterState');
-    if (mobsterStateJson != null) {
-        state = JSON.parse(mobsterStateJson) as stateType;
+const getGlobalState = () => {
+    const stateJSON = window.localStorage.getItem('MobsterState');
+    if (stateJSON) {
+        return JSON.parse(stateJSON) as GlobalState;
     }
-}
-init();
-
-const LogicService = {
-    init,
-    getPeople,
-    addPerson,
-    setPeople,
-    state
+    return null;
 }
 
-export default LogicService;
+const GlobalStateRepository = {
+    saveState: saveGlobalState,
+    getState: getGlobalState
+}
+
+export default GlobalStateRepository;

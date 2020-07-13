@@ -1,6 +1,6 @@
 import React, { useState, useEffect, forwardRef, Ref, useImperativeHandle } from "react";
 import ms from "pretty-ms";
-import { ConfigParameters } from "./MainCard";
+import { ConfigParameters } from "../models/types";
 
 
 export type TimeRef = {
@@ -10,6 +10,7 @@ export type TimeRef = {
 }
 
 const Timer = forwardRef((props: { onFinish: () => void }, ref: Ref<TimeRef>) => {
+  // const { state, dispatch } = useContext(StateContext);
   const [started, setStarted] = useState(false);
   const [state, setState] = useState({ time: 0, start: 0 });
   const startTimer = (config: ConfigParameters) => {
@@ -41,7 +42,7 @@ const Timer = forwardRef((props: { onFinish: () => void }, ref: Ref<TimeRef>) =>
     }
 
     return () => clearInterval(intervalId);
-  }, [state]);
+  }, [state, props, started]);
 
   useImperativeHandle(ref, () => ({
     startTimer,

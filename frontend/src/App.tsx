@@ -2,14 +2,19 @@ import React from "react";
 import { makeStyles, createMuiTheme, ThemeProvider } from "@material-ui/core";
 import MainCard from "./components/MainCard";
 import { blue } from "@material-ui/core/colors";
+import StateStoreProvider from "./services/StateStore";
 
 function App() {
   const classes = useStyles();
 
   return (
-    <div className={classes.App}>
-      <ThemeProvider theme={theme}>{<MainCard />}</ThemeProvider>
-    </div>
+    <StateStoreProvider>
+      <div className={classes.App}>
+        <ThemeProvider theme={theme}>
+          {<MainCard />}
+        </ThemeProvider>
+      </div>
+    </StateStoreProvider>
   );
 }
 
