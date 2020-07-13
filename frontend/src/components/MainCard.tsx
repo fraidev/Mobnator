@@ -6,6 +6,7 @@ import DndPeople from "./DndPeople";
 import { StateContext } from "../services/StateStore";
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import GroupIcon from '@material-ui/icons/Group';
+import { type } from "os";
 
 export interface Item {
   id: number;
@@ -15,7 +16,6 @@ export interface Item {
 const MainCard: React.FC = () => {
   const { state, dispatch } = useContext(StateContext);
   const [started, setStarted] = useState(false);
-  const [firstStarted, setFirstStarted] = useState(false);
   const [textField, setTextField] = useState("");
 
   const timerRef = useRef<TimeRef>(null);
@@ -31,13 +31,12 @@ const MainCard: React.FC = () => {
 
   const startMob = () => {
     setStarted(!started);
-    if (firstStarted) {
+    if (state.firstStarted) {
       timerRef?.current?.continueTimer()
     } else {
       timerRef?.current?.startTimer(state.config);
-
     }
-    setFirstStarted(true);
+    dispatch({ type: 'SET_FIRST_STARTED', payload: true });
   };
 
   const stopMob = () => {
@@ -48,7 +47,20 @@ const MainCard: React.FC = () => {
   const onFinish = () => {
     dispatch({ type: 'ROLL_PEOPLE', payload: null })
     timerRef?.current?.startTimer(state.config);
+
+    if (state.config.pastRounds > state.config.roundCount) {
+      timerRef?.current?.startTimer(state.config);
+    }
   };
+
+  const deleteButton = () => {
+    if (state.firstStarted) {
+      return (
+        <Button onClick={handleResetConfigs} >
+          {<DeleteForeverIcon className={classes.groupIcon} />}
+        </Button>)
+    }
+  }
 
 
   const button = () => {
@@ -60,6 +72,18 @@ const MainCard: React.FC = () => {
         Start Mob
       </Button>)
   }
+
+  const breakText = () => {
+    if (state.config.break) {
+      return <div> Break Time! </div>
+    }
+  }
+
+  const handleResetConfigs = () => {
+    dispatch({ type: 'RESET_CONFIG', payload: null });
+    timerRef?.current?.resetTime();
+  }
+
 
   return (
     <Card className={classes.root}>
@@ -92,7 +116,7 @@ const MainCard: React.FC = () => {
                   className={classes.parametersItems}
                   size="small"
                   variant="outlined"
-                  defaultValue={state.config.roundMinutes}
+                  value={state.config.roundMinutes}
                   type="number"
                   disabled={started}
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) => dispatch({ type: 'SET_CONFIG_ROUND_MINUTES', payload: e.target?.value })}
@@ -104,7 +128,7 @@ const MainCard: React.FC = () => {
                   className={classes.parametersItems}
                   size="small"
                   variant="outlined"
-                  defaultValue={state.config.breakMinutes}
+                  value={state.config.breakMinutes}
                   type="number"
                   disabled={started}
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) => dispatch({ type: 'SET_CONFIG_BREAK_MINUTES', payload: e.target?.value })}
@@ -116,7 +140,7 @@ const MainCard: React.FC = () => {
                   className={classes.parametersItems}
                   size="small"
                   variant="outlined"
-                  defaultValue={state.config.roundCount}
+                  value={state.config.roundCount}
                   type="number"
                   disabled={started}
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) => dispatch({ type: 'SET_CONFIG_ROUND_COUNT', payload: e.target?.value })}
@@ -129,7 +153,7 @@ const MainCard: React.FC = () => {
                 {/* <CasinoOutlinedIcon className={classes.diceIcon}></CasinoOutlinedIcon>*/}
                 <div>Paused</div>
                 <div>Working</div>
-                <div>Break Time</div>
+                {breakText()}
               </Grid>
               {/* <Grid className={classes.parametersGrid} item xs={12}>
                 <GroupIcon className={classes.groupIcon}></GroupIcon>
@@ -149,7 +173,7 @@ const MainCard: React.FC = () => {
           {button()}
         </Grid>
         <Grid item xs={1}>
-          {<DeleteForeverIcon className={classes.groupIcon} />}
+          {deleteButton()}
         </Grid>
       </CardActions>
     </Card >

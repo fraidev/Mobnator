@@ -10,6 +10,8 @@ export type ConfigParameters = {
     roundMinutes: number,
     breakMinutes: number,
     roundCount: number,
+    pastRounds: number,
+    break: boolean,
 }
 
 export type Person = {

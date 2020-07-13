@@ -1,17 +1,20 @@
 import React, { createContext, useReducer, Dispatch } from "react";
 import StateReducer from "./StateReducer";
-import { GlobalState } from "../models/types";
+import { GlobalState, ConfigParameters } from "../models/types";
 
+export const initialTimeConfig: ConfigParameters = {
+    roundMinutes: 10,
+    breakMinutes: 5,
+    roundCount: 6,
+    pastRounds: 0,
+    break: false
+}
 
 const initialState: GlobalState = {
     started: false,
     firstStarted: false,
     people: [],
-    config: {
-        roundMinutes: 10,
-        breakMinutes: 5,
-        roundCount: 6,
-    }
+    config: initialTimeConfig
 }
 
 export const StateContext = createContext<{

@@ -1,6 +1,7 @@
 import { v4 as uuidV4 } from 'uuid';
 import GlobalStateRepository from "./LogicService";
 import { GlobalState } from '../models/types';
+import { initialTimeConfig } from './StateStore';
 
 const StateReducer = (state: GlobalState, action: { type: any; payload: any; }) => {
     const newState = handlers(state, action);
@@ -35,9 +36,15 @@ const handlers = (state: GlobalState, action: { type: any; payload: any; }) => {
             sanitizePeople(state);
             return { ...state };
         case 'ROLL_PEOPLE':
-            const first = state.people.shift();
-            state.people.push(first!);
-            sanitizePeople(state);
+            if (state.config.break) {
+                state.config.pastRounds = 0;
+            } else {
+                const first = state.people.shift();
+                state.people.push(first!);
+                sanitizePeople(state);
+                state.config.pastRounds++;
+            }
+            state.config.break = (state.config.pastRounds > state.config.roundCount)
             return { ...state };
         case 'SET_CONFIG_ROUND_MINUTES':
             state.config.roundMinutes = parseInt(action.payload)
@@ -47,6 +54,16 @@ const handlers = (state: GlobalState, action: { type: any; payload: any; }) => {
             return { ...state };
         case 'SET_CONFIG_ROUND_COUNT':
             state.config.roundCount = parseInt(action.payload)
+            return { ...state };
+        case 'SET_CONFIG_TAKE_A_BREAK':
+            state.config.break = true;
+            return { ...state };
+        case 'RESET_CONFIG':
+            state.config = initialTimeConfig
+            state.firstStarted = false;
+            return { ...state };
+        case 'SET_FIRST_STARTED':
+            state.firstStarted = action.payload;
             return { ...state };
         default:
             return state;

@@ -5,17 +5,18 @@ import { ConfigParameters } from "../models/types";
 
 export type TimeRef = {
   startTimer: (config: ConfigParameters) => void;
+  resetTime: () => void;
   stopTimer: () => void;
   continueTimer: () => void;
 }
 
 const Timer = forwardRef((props: { onFinish: () => void }, ref: Ref<TimeRef>) => {
-  // const { state, dispatch } = useContext(StateContext);
   const [started, setStarted] = useState(false);
   const [state, setState] = useState({ time: 0, start: 0 });
   const startTimer = (config: ConfigParameters) => {
     setStarted(true);
-    setState({ time: config.roundMinutes * 60000, start: Date.now() });
+    const time = config.break ? config.breakMinutes : config.roundMinutes;
+    setState({ time: time * 60000, start: Date.now() });
   };
   const stopTimer = () => {
     setStarted(false);
@@ -24,6 +25,9 @@ const Timer = forwardRef((props: { onFinish: () => void }, ref: Ref<TimeRef>) =>
     setStarted(true);
     setState({ time: state.time, start: state.start });
   };
+  const resetTime = () => {
+    setState({ time: 0, start: Date.now() });
+  }
 
   useEffect(() => {
     const intervalId = setTimeout(() => {
@@ -47,7 +51,8 @@ const Timer = forwardRef((props: { onFinish: () => void }, ref: Ref<TimeRef>) =>
   useImperativeHandle(ref, () => ({
     startTimer,
     stopTimer,
-    continueTimer
+    continueTimer,
+    resetTime
   }));
 
   const timer =
