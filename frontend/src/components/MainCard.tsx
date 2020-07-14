@@ -7,6 +7,7 @@ import { StateContext } from "../services/StateStore";
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import GroupIcon from '@material-ui/icons/Group';
 import { type } from "os";
+import { start } from "repl";
 
 export interface Item {
   id: number;
@@ -56,7 +57,7 @@ const MainCard: React.FC = () => {
   const deleteButton = () => {
     if (state.firstStarted) {
       return (
-        <Button onClick={handleResetConfigs} >
+        <Button onClick={handleResetConfigs} disabled={started}>
           {<DeleteForeverIcon className={classes.groupIcon} />}
         </Button>)
     }
@@ -73,9 +74,14 @@ const MainCard: React.FC = () => {
       </Button>)
   }
 
-  const breakText = () => {
+  const timeText = () => {
     if (state.config.break) {
       return <div> Break Time! </div>
+    }
+    if (started) {
+      return <div> Running </div>
+    } else {
+      return <div> Paused </div>
     }
   }
 
@@ -151,9 +157,7 @@ const MainCard: React.FC = () => {
               </Grid>
               <Grid className={classes.timerText} item xs={12}>
                 {/* <CasinoOutlinedIcon className={classes.diceIcon}></CasinoOutlinedIcon>*/}
-                <div>Paused</div>
-                <div>Working</div>
-                {breakText()}
+                {timeText()}
               </Grid>
               {/* <Grid className={classes.parametersGrid} item xs={12}>
                 <GroupIcon className={classes.groupIcon}></GroupIcon>
