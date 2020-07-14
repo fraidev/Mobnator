@@ -5,6 +5,7 @@ import ItemTypes from "./item-types";
 import DriveEtaIcon from '@material-ui/icons/DriveEta';
 import MapIcon from '@material-ui/icons/Map';
 import { Person } from "../models/types";
+import { Grid } from "@material-ui/core";
 
 
 export interface CardProps {
@@ -90,9 +91,15 @@ const DndPersonCard: React.FC<CardProps> = ({ id, person, index, moveCard, start
   drag(drop(ref));
   return (
     <div ref={ref} style={{ ...style, opacity }}>
-      {person.isDriver ? <DriveEtaIcon /> : ""}
-      {person.isNavigator ? <MapIcon /> : ""}
-      {person.name}
+      <Grid container spacing={3}>
+        <Grid item xs={2}>
+          {person.isDriver ? <DriveEtaIcon /> : ""}
+          {person.isNavigator ? <MapIcon /> : ""}
+        </Grid>
+        <Grid item xs={8}>
+          {person.name}
+        </Grid>
+      </Grid>
     </div>
   );
 };

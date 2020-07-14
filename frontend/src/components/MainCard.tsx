@@ -1,13 +1,10 @@
 import React, { useState, useRef, useContext, useEffect } from "react";
 import Button from "@material-ui/core/Button";
-import { Card, CardContent, Typography, CardActions, makeStyles, Grid, TextField } from "@material-ui/core";
+import { Card, CardContent, Typography, CardActions, makeStyles, Grid, TextField, Tooltip } from "@material-ui/core";
 import Timer, { TimeRef } from "./Timer";
 import DndPeople from "./DndPeople";
 import { StateContext } from "../services/StateStore";
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
-import GroupIcon from '@material-ui/icons/Group';
-import { type } from "os";
-import { start } from "repl";
 
 export interface Item {
   id: number;
@@ -57,9 +54,11 @@ const MainCard: React.FC = () => {
   const deleteButton = () => {
     if (state.firstStarted) {
       return (
-        <Button onClick={handleResetConfigs} disabled={started}>
-          {<DeleteForeverIcon className={classes.groupIcon} />}
-        </Button>)
+        <Tooltip title="Reset Configurations" aria-label="Reset Configurations">
+          <Button onClick={handleResetConfigs} disabled={started}>
+            {<DeleteForeverIcon className={classes.groupIcon} />}
+          </Button>
+        </Tooltip>)
     }
   }
 
@@ -117,7 +116,7 @@ const MainCard: React.FC = () => {
             </div>
             <div className={classes.parameters}>
               <Grid className={classes.parametersGrid} item xs={12}>
-                <span className={classes.parametersLabel}>Duração da rodada em minutos:</span>
+                <span className={classes.parametersLabel}>Round duration in minutes:</span>
                 <TextField
                   className={classes.parametersItems}
                   size="small"
@@ -129,7 +128,7 @@ const MainCard: React.FC = () => {
                 ></TextField>
               </Grid>
               <Grid className={classes.parametersGrid} item xs={12}>
-                <span className={classes.parametersLabel}>Duração do intervalo em minutos:</span>
+                <span className={classes.parametersLabel}>Interval duration in minutes:</span>
                 <TextField
                   className={classes.parametersItems}
                   size="small"
@@ -141,7 +140,7 @@ const MainCard: React.FC = () => {
                 ></TextField>
               </Grid>
               <Grid className={classes.parametersGrid} item xs={12}>
-                <span className={classes.parametersLabel}>Intervalo inicia após (quantidade de rodadas):</span>
+                <span className={classes.parametersLabel}>Start interval after (number of rounds):</span>
                 <TextField
                   className={classes.parametersItems}
                   size="small"
@@ -171,7 +170,9 @@ const MainCard: React.FC = () => {
       </CardContent >
       <CardActions>
         <Grid item xs={1}>
-          <GroupIcon className={classes.groupIcon}></GroupIcon>
+          {/* <Button disabled={true} >
+              <GroupIcon className={classes.groupIcon}></GroupIcon>
+            </Button> */}
         </Grid>
         <Grid item xs={10}>
           {button()}
