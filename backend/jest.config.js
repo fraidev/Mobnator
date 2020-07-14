@@ -1,4 +1,5 @@
 module.exports = {
+  testResultsProcessor: "jest-teamcity-reporter",
   roots: ["<rootDir>/src", "<rootDir>/test"],
   transform: {
     "^.+\\.tsx?$": "ts-jest"
