@@ -1,15 +1,15 @@
-import React, { useCallback, useContext } from "react";
-import { DndProvider } from "react-dnd";
-import Backend from "react-dnd-html5-backend";
-import DndPersonCard from "./DndPersonCard";
-import update from "immutability-helper";
-import { ContextMenu, MenuItem, ContextMenuTrigger } from "react-contextmenu";
-import { Person } from "../models/types";
-import { StateContext } from "../services/StateStore";
+import React, { useCallback, useContext } from 'react'
+import { DndProvider } from 'react-dnd'
+import Backend from 'react-dnd-html5-backend'
+import DndPersonCard from './DndPersonCard'
+import update from 'immutability-helper'
+import { ContextMenu, MenuItem, ContextMenuTrigger } from 'react-contextmenu'
+import { Person } from '../models/types'
+import { StateContext } from '../services/StateStore'
 
 const style = {
   width: 400
-};
+}
 
 export type Item = {
   id: number;
@@ -28,10 +28,10 @@ type RightCommandTypes = {
 }
 
 const DndPeople: React.FC = () => {
-  const { state, dispatch } = useContext(StateContext);
+  const { state, dispatch } = useContext(StateContext)
 
   const handleClick = (e: any, data: RightCommandTypes) => {
-    console.log(data);
+    console.log(data)
     // if (data.command === 'navigator') {
     //   people[data.index].isNavigator = true;
     //   let p = [...people];
@@ -46,35 +46,33 @@ const DndPeople: React.FC = () => {
     // }
     if (data.command === 'remove') {
       console.log(data.target.innerText)
-      const p = state.people.filter(x => x.id !== data.person.id);
+      const p = state.people.filter(x => x.id !== data.person.id)
       dispatch({ type: 'SET_PEOPLE', payload: p })
     }
   }
 
   const moveCard = useCallback(
     (dragIndex: number, hoverIndex: number) => {
-      const dragCard = state.people[dragIndex];
-      let p = update(state.people, {
+      const dragCard = state.people[dragIndex]
+      const p = update(state.people, {
         $splice: [
           [dragIndex, 1],
-          [hoverIndex, 0, dragCard],
-        ],
-      });
-
+          [hoverIndex, 0, dragCard]
+        ]
+      })
 
       p.forEach(x => {
-        x.isDriver = false;
-        x.isNavigator = false;
-      });
+        x.isDriver = false
+        x.isNavigator = false
+      })
 
-
-      p[0].isDriver = true;
-      p[1].isNavigator = true;
+      p[0].isDriver = true
+      p[1].isNavigator = true
 
       dispatch({ type: 'SET_PEOPLE', payload: p })
     },
     [state.people, dispatch]
-  );
+  )
 
   const renderCard = (person: Person, index: number) => {
     return (
@@ -83,11 +81,11 @@ const DndPeople: React.FC = () => {
         <DndPersonCard index={index} id={person.id}
           person={person} moveCard={moveCard} started={state.started} />
       </ContextMenuTrigger>
-    );
-  };
+    )
+  }
 
   const rightClickMenu = (person: Person, index: number) => {
-    if (!state.started)
+    if (!state.started) {
       return (
         <ContextMenu id={index.toString()}>
           {/* <MenuItem data={{ command: 'navigator', person: person, index: index }} onClick={handleClick}>
@@ -101,12 +99,13 @@ const DndPeople: React.FC = () => {
             Remove
           </MenuItem>
         </ContextMenu>)
+    }
   }
 
   return <DndProvider backend={Backend}>{
     <div style={style}>
       {state.people.map((person, index) => renderCard(person, index))}
-    </div>}</DndProvider>;
-};
+    </div>}</DndProvider>
+}
 
-export default DndPeople;
+export default DndPeople
