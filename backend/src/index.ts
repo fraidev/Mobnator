@@ -1,3 +1,5 @@
-const sum = (a, b) => a + b
+import server from './server';
 
-sum(1, 2)
+server.listen(5004, () => {
+  console.log(`[SERVER] Running at http://localhost:5004`);
+});
