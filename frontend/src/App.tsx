@@ -3,6 +3,11 @@ import { makeStyles, createMuiTheme, ThemeProvider } from '@material-ui/core'
 import { blue } from '@material-ui/core/colors'
 import MainCard from './components/MainCard'
 import StateStoreProvider from './services/StateStore'
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route
+} from 'react-router-dom'
 
 function App() {
   const classes = useStyles()
@@ -11,7 +16,16 @@ function App() {
     <StateStoreProvider>
       <div className={classes.App}>
         <ThemeProvider theme={theme}>
-          {<MainCard />}
+          <Router>
+            <Switch>
+              <Route path="/">
+                {<MainCard />}
+              </Route>
+              <Route path="/:token">
+                {<MainCard />}
+              </Route>
+            </Switch>
+          </Router >
         </ThemeProvider>
       </div>
     </StateStoreProvider>

@@ -26,13 +26,14 @@ const handlers = (state: GlobalState, action: { type: any; payload: any; }) => {
         })
       return { ...state }
     case 'SYNC':
-
       if (action.payload) {
-        axios.get('http://localhost:5002/api/state').then((res) => {
-          state = res.data
-        })
+        state = action.payload
+        console.log(action.payload)
       } else {
-        state = GlobalStateRepository.getState()!
+        const chace = GlobalStateRepository.getState()
+        if (chace) {
+          state = chace
+        }
       }
       return { ...state }
     case 'SET_STARTED':

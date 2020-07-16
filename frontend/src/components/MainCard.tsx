@@ -6,6 +6,7 @@ import DndPeople from './DndPeople'
 import { StateContext } from '../services/StateStore'
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever'
 import GroupIcon from '@material-ui/icons/Group'
+import axios from 'axios'
 
 export interface Item {
   id: number;
@@ -23,11 +24,15 @@ const MainCard: React.FC = () => {
 
   useEffect(() => {
     const pathname = window.location.pathname
-    if (pathname !== '/') {
-      setShared(true)
+    console.log(pathname)
+    if (pathname === '/') {
       dispatch({ type: 'SYNC', payload: null })
     } else {
-      dispatch({ type: 'SYNC', payload: pathname })
+      setShared(true)
+      axios.get('http://localhost:5002/api/state', { params: { token: pathname.substr(1) } }).then((res) => {
+        console.log(res)
+        dispatch({ type: 'SYNC', payload: JSON.parse(res.data).state })
+      })
     }
   }, [dispatch, setStarted])
 
@@ -81,7 +86,7 @@ const MainCard: React.FC = () => {
   }
 
   const timeText = () => {
-    if (state.config.break) {
+    if (state.config?.break) {
       return <div> Break Time! </div>
     }
     if (started) {
@@ -131,7 +136,7 @@ const MainCard: React.FC = () => {
                   className={classes.parametersItems}
                   size="small"
                   variant="outlined"
-                  value={state.config.roundMinutes}
+                  value={state.config?.roundMinutes}
                   type="number"
                   disabled={started}
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) => dispatch({ type: 'SET_CONFIG_ROUND_MINUTES', payload: e.target?.value })}
@@ -143,7 +148,7 @@ const MainCard: React.FC = () => {
                   className={classes.parametersItems}
                   size="small"
                   variant="outlined"
-                  value={state.config.breakMinutes}
+                  value={state.config?.breakMinutes}
                   type="number"
                   disabled={started}
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) => dispatch({ type: 'SET_CONFIG_BREAK_MINUTES', payload: e.target?.value })}
@@ -155,7 +160,7 @@ const MainCard: React.FC = () => {
                   className={classes.parametersItems}
                   size="small"
                   variant="outlined"
-                  value={state.config.roundCount}
+                  value={state.config?.roundCount}
                   type="number"
                   disabled={started}
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) => dispatch({ type: 'SET_CONFIG_ROUND_COUNT', payload: e.target?.value })}

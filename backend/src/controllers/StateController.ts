@@ -7,8 +7,7 @@ const stateControllerRouter = express.Router();
 
 stateControllerRouter.get('/state', async (req, res): Promise<void> => {
   try {
-    const state = await getAsync(req.body)
-    console.log(state)
+    const state = await getAsync(req.query.token)
     res.json(state)
 
   } catch (err) {
