@@ -5,6 +5,7 @@ import Timer, { TimeRef } from './Timer'
 import DndPeople from './DndPeople'
 import { StateContext } from '../services/StateStore'
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever'
+import GroupIcon from '@material-ui/icons/Group'
 
 export interface Item {
   id: number;
@@ -14,14 +15,21 @@ export interface Item {
 const MainCard: React.FC = () => {
   const { state, dispatch } = useContext(StateContext)
   const [started, setStarted] = useState(false)
+  const [shared, setShared] = useState(false)
   const [textField, setTextField] = useState('')
 
   const timerRef = useRef<TimeRef>(null)
   const classes = useStyles()
 
   useEffect(() => {
-    dispatch({ type: 'SYNC', payload: null })
-  }, [dispatch])
+    const pathname = window.location.pathname
+    if (pathname !== '/') {
+      setShared(true)
+      dispatch({ type: 'SYNC', payload: null })
+    } else {
+      dispatch({ type: 'SYNC', payload: pathname })
+    }
+  }, [dispatch, setStarted])
 
   const addPerson = () => {
     dispatch({ type: 'ADD_PERSON', payload: textField })
@@ -86,6 +94,10 @@ const MainCard: React.FC = () => {
   const handleResetConfigs = () => {
     dispatch({ type: 'RESET_CONFIG', payload: null })
     timerRef?.current?.resetTime()
+  }
+
+  const handleShare = () => {
+    dispatch({ type: 'SHARE', payload: null })
   }
 
   return (
@@ -156,9 +168,6 @@ const MainCard: React.FC = () => {
                 {/* <CasinoOutlinedIcon className={classes.diceIcon}></CasinoOutlinedIcon> */}
                 {timeText()}
               </Grid>
-              {/* <Grid className={classes.parametersGrid} item xs={12}>
-                <GroupIcon className={classes.groupIcon}></GroupIcon>
-              </Grid> */}
             </div>
           </Grid>
           <Grid item xs={6}>
@@ -168,9 +177,15 @@ const MainCard: React.FC = () => {
       </CardContent >
       <CardActions>
         <Grid item xs={1}>
-          {/* <Button disabled={true} >
-              <GroupIcon className={classes.groupIcon}></GroupIcon>
-            </Button> */}
+          {
+            shared
+              ? ''
+              : <Tooltip title="Reset Configurations" aria-label="Reset Configurations">
+                <Button disabled={false} onClick={handleShare} >
+                  <GroupIcon className={classes.groupIcon}></GroupIcon>
+                </Button>
+              </Tooltip>
+          }
         </Grid>
         <Grid item xs={10}>
           {button()}

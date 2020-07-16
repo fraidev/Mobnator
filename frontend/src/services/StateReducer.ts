@@ -2,6 +2,8 @@ import { v4 as uuidV4 } from 'uuid'
 import GlobalStateRepository from './LogicService'
 import { GlobalState } from '../models/types'
 import { initialTimeConfig } from './StateStore'
+// import openSocket from 'socket.io-client'
+import axios from 'axios'
 
 const StateReducer = (state: GlobalState, action: { type: any; payload: any; }) => {
   const newState = handlers(state, action)
@@ -10,12 +12,27 @@ const StateReducer = (state: GlobalState, action: { type: any; payload: any; }) 
   return newState
 }
 
+// const socket = openSocket('http://localhost:5004')
+
 const handlers = (state: GlobalState, action: { type: any; payload: any; }) => {
   switch (action.type) {
+    case 'SHARE':
+      state = GlobalStateRepository.getState()!
+
+      axios.post('http://localhost:5002/api/share', { state })
+        .then(res => {
+          // socket.emit('send:message', res.data)
+          window.location.pathname = '/' + res.data
+        })
+      return { ...state }
     case 'SYNC':
-      const newState = GlobalStateRepository.getState()
-      if (newState) {
-        state = newState
+
+      if (action.payload) {
+        axios.get('http://localhost:5002/api/state').then((res) => {
+          state = res.data
+        })
+      } else {
+        state = GlobalStateRepository.getState()!
       }
       return { ...state }
     case 'SET_STARTED':

@@ -1,20 +1,15 @@
 import express from 'express';
 import crypto from 'crypto'
+import socket from 'src/services/Socket';
 import { getAsync, client } from 'src/services/RedisService';
 
 const stateControllerRouter = express.Router();
 
-stateControllerRouter.get('/token', async (req, res): Promise<void> => {
+stateControllerRouter.get('/state', async (req, res): Promise<void> => {
   try {
-    const generateToken = crypto.randomBytes(5).toString('hex')
-
-    const key = await getAsync(generateToken)
-    if (key == null) {
-      res.json(generateToken);
-    }
-    client.set('key', 'uiai')
-    console.log(key)
-    res.json(generateToken);
+    const state = await getAsync(req.body)
+    console.log(state)
+    res.json(state)
 
   } catch (err) {
     res.status(err.status).json({
@@ -26,13 +21,14 @@ stateControllerRouter.get('/token', async (req, res): Promise<void> => {
 
 stateControllerRouter.post('/share', async (req, res): Promise<void> => {
   try {
-    const { token, state } = req.body;
-    client.set(token, state)
-
-    res.json({
-      message: token,
-      status: 200,
+    const token = crypto.randomBytes(5).toString('hex')
+    client.set(token, JSON.stringify(req.body))
+    socket.on(token, function (data) {
+      client.set(token, JSON.stringify(data))
+      console.log(data);
     });
+    console.log(req.body)
+    res.json(token);
 
   } catch (error) {
     res.status(error.status).json(error);

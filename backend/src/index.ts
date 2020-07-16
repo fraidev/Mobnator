@@ -1,5 +1,6 @@
 import server from './server';
 
-server.listen(5004, () => {
-  console.log(`[SERVER] Running at http://localhost:5004`);
+server.listen(5002, () => {
+  console.log(`[SERVER] Running at http://localhost:5002`);
 });
+
