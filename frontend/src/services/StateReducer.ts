@@ -5,7 +5,7 @@ import { initialTimeConfig } from './StateStore'
 import openSocket from 'socket.io-client'
 import axios from 'axios'
 
-export const socket = openSocket('http://localhost:5004')
+export const socket = openSocket(process.env.REACT_APP_BACKEND_BASE_URL!)
 
 const StateReducer = (state: GlobalState, action: { type: any; payload: any; }) => {
   if (action.type === 'SYNC') {
@@ -54,7 +54,7 @@ const actionHandlers = (state: GlobalState, action: { type: any; payload: any; }
     case 'SHARE':
       state = GlobalStateRepository.getState()!
 
-      axios.post('http://localhost:5002/api/share', state)
+      axios.post(process.env.REACT_APP_BACKEND_BASE_URL + '/api/share', state)
         .then(res => {
           // socket.emit('send:message', res.data)
           window.location.pathname = '/' + res.data

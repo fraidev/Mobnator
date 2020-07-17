@@ -29,7 +29,7 @@ const MainCard: React.FC = () => {
     } else {
       setShared(true)
       const token = pathname.substring(1)
-      axios.get('http://localhost:5002/api/state', { params: { token: token } }).then((res) => {
+      axios.get(process.env.REACT_APP_BACKEND_BASE_URL + '/api/state', { params: { token: token } }).then((res) => {
         dispatch({ type: 'SYNC', payload: JSON.parse(res.data) })
         socket.on(token, (state: string) => {
           dispatch({ type: 'SYNC', payload: JSON.parse(state) })
