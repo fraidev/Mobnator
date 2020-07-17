@@ -22,6 +22,9 @@ const StateReducer = (state: GlobalState, action: { type: any; payload: any; }) 
   }
 
   if (action.type === 'ROLL_PEOPLE') {
+    state.config.breakDate = Date.now()
+    state.config.roundDate = Date.now()
+    state.mode = 'waiting'
     if (state.config.break) {
       state.config.pastRounds = 0
     } else {
@@ -57,8 +60,14 @@ const actionHandlers = (state: GlobalState, action: { type: any; payload: any; }
           window.location.pathname = '/' + res.data
         })
       return { ...state }
-    case 'SET_STARTED':
-      state.started = action.payload
+    case 'SET_RUNNING_MODE':
+      state.mode = 'running'
+      return { ...state }
+    case 'SET_PAUSED_MODE':
+      state.mode = 'paused'
+      return { ...state }
+    case 'SET_WAITING_MODE':
+      state.mode = 'waiting'
       return { ...state }
     case 'SET_FIRST_STARTED':
       state.firstStarted = action.payload

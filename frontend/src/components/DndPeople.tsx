@@ -79,13 +79,13 @@ const DndPeople: React.FC = () => {
       <ContextMenuTrigger key={person.id} id={index.toString()} holdToDisplay={1000}>
         {rightClickMenu(person, index)}
         <DndPersonCard index={index} id={person.id}
-          person={person} moveCard={moveCard} started={state.started} />
+          person={person} moveCard={moveCard} started={state.mode !== 'paused'} />
       </ContextMenuTrigger>
     )
   }
 
   const rightClickMenu = (person: Person, index: number) => {
-    if (!state.started) {
+    if (state.mode !== 'paused') {
       return (
         <ContextMenu id={index.toString()}>
           {/* <MenuItem data={{ command: 'navigator', person: person, index: index }} onClick={handleClick}>

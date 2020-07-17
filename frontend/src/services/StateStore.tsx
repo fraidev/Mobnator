@@ -13,7 +13,7 @@ export const initialTimeConfig: ConfigParameters = {
 }
 
 const initialState: GlobalState = {
-  started: false,
+  mode: 'paused',
   firstStarted: false,
   people: [],
   config: initialTimeConfig

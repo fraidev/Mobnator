@@ -39,7 +39,7 @@ const MainCard: React.FC = () => {
   }, [dispatch, setShared])
 
   useEffect(() => {
-    if (state.started) {
+    if (state.mode === 'running') {
       if (state.firstStarted) {
         timerRef?.current?.continueTimer!()
       } else {
@@ -48,7 +48,7 @@ const MainCard: React.FC = () => {
     } else {
       timerRef?.current?.stopTimer!()
     }
-  }, [state.started, state.config, state.firstStarted])
+  }, [state.mode, state.config, state.firstStarted])
 
   const addPerson = () => {
     dispatch({ type: 'ADD_PERSON', payload: textField })
@@ -62,23 +62,24 @@ const MainCard: React.FC = () => {
         breakDate: Date.now()
       }
     })
-    dispatch({ type: 'SET_STARTED', payload: true })
+    dispatch({ type: 'SET_RUNNING_MODE', payload: null })
   }
 
   const stopMob = () => {
-    dispatch({ type: 'SET_STARTED', payload: false })
+    dispatch({ type: 'SET_PAUSED_MODE', payload: null })
     dispatch({ type: 'SET_FIRST_STARTED', payload: true })
   }
 
   const onFinish = () => {
-    dispatch({
-      type: 'SET_CONFIG_DATES',
-      payload: {
-        roundDate: Date.now(),
-        breakDate: Date.now()
-      }
-    })
-    timerRef?.current?.startTimer!(state.config)
+    // dispatch({ type: 'SET_WAITING_MODE', payload: null })
+    // dispatch({
+    //   type: 'SET_CONFIG_DATES',
+    //   payload: {
+    //     roundDate: Date.now(),
+    //     breakDate: Date.now()
+    //   }
+    // })
+    // timerRef?.current?.startTimer!(state.config)
     if (state.people.length > 1) {
       dispatch({ type: 'ROLL_PEOPLE', payload: null })
     }
@@ -88,7 +89,7 @@ const MainCard: React.FC = () => {
     if (state.firstStarted) {
       return (
         <Tooltip title="Reset Configurations" aria-label="Reset Configurations">
-          <Button onClick={handleResetConfigs} disabled={state.started}>
+          <Button onClick={handleResetConfigs} disabled={state.mode !== 'paused'}>
             {<DeleteForeverIcon className={classes.groupIcon} />}
           </Button>
         </Tooltip>)
@@ -96,23 +97,34 @@ const MainCard: React.FC = () => {
   }
 
   const button = () => {
-    return (state.started
-      ? <Button className={classes.redButton} variant="contained" onClick={stopMob} >
-        Stop Mob
-      </Button >
-      : <Button className={classes.startButton} variant="contained" color="primary" onClick={startMob}>
-        Start Mob
-      </Button>)
+    switch (state.mode) {
+      case 'paused':
+        return <Button className={classes.startButton} variant="contained" color="primary" onClick={startMob}>
+          Start Mob
+        </Button>
+      case 'running':
+        return <Button className={classes.redButton} variant="contained" onClick={stopMob} >
+          Stop Mob
+        </Button >
+      case 'waiting':
+        return <Button className={classes.redButton} variant="contained" color="primary" onClick={startMob} >
+          Continue Mob
+        </Button >
+    }
   }
 
   const timeText = () => {
     if (state.config?.break) {
       return <div> Break Time! </div>
     }
-    if (state.started) {
-      return <div> Running </div>
-    } else {
-      return <div> Paused </div>
+
+    switch (state.mode) {
+      case 'paused':
+        return <div> Running </div>
+      case 'running':
+        return <div> Running </div>
+      case 'waiting':
+        return <div> Waiting </div>
     }
   }
 
@@ -139,13 +151,13 @@ const MainCard: React.FC = () => {
                 variant="outlined"
                 label="Enter the name here"
                 className={classes.textField}
-                disabled={state.started}
+                disabled={state.mode !== 'paused'}
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => setTextField(e.target?.value)}
                 onKeyDown={(e) => e.key === 'Enter' && addPerson()}
               ></TextField>
 
               <Button className={classes.addButton} variant="contained" color="secondary" onClick={addPerson}
-                disabled={state.started}>
+                disabled={state.mode !== 'paused'}>
                 Add Participant
               </Button>
             </div>
@@ -158,7 +170,7 @@ const MainCard: React.FC = () => {
                   variant="outlined"
                   value={state.config?.roundMinutes}
                   type="number"
-                  disabled={state.started}
+                  disabled={state.mode !== 'paused'}
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) => dispatch({ type: 'SET_CONFIG_ROUND_MINUTES', payload: e.target?.value })}
                 ></TextField>
               </Grid>
@@ -170,7 +182,7 @@ const MainCard: React.FC = () => {
                   variant="outlined"
                   value={state.config?.breakMinutes}
                   type="number"
-                  disabled={state.started}
+                  disabled={state.mode !== 'paused'}
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) => dispatch({ type: 'SET_CONFIG_BREAK_MINUTES', payload: e.target?.value })}
                 ></TextField>
               </Grid>
@@ -182,7 +194,7 @@ const MainCard: React.FC = () => {
                   variant="outlined"
                   value={state.config?.roundCount}
                   type="number"
-                  disabled={state.started}
+                  disabled={state.mode !== 'paused'}
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) => dispatch({ type: 'SET_CONFIG_ROUND_COUNT', payload: e.target?.value })}
                 ></TextField>
               </Grid>

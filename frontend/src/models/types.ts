@@ -1,6 +1,7 @@
 
 export type GlobalState = {
-  started: boolean;
+  // started: boolean;
+  mode: 'paused' | 'running' | 'waiting';
   firstStarted: boolean;
   people: Person[];
   config: ConfigParameters;
