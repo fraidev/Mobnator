@@ -7,6 +7,8 @@ export type GlobalState = {
 }
 
 export type ConfigParameters = {
+  breakDate: number,
+  roundDate: number,
   roundMinutes: number,
   breakMinutes: number,
   roundCount: number,

@@ -3,6 +3,8 @@ import StateReducer from './StateReducer'
 import { GlobalState, ConfigParameters } from '../models/types'
 
 export const initialTimeConfig: ConfigParameters = {
+  breakDate: Date.now(),
+  roundDate: Date.now(),
   roundMinutes: 10,
   breakMinutes: 5,
   roundCount: 6,

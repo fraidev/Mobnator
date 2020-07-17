@@ -21,6 +21,19 @@ const StateReducer = (state: GlobalState, action: { type: any; payload: any; }) 
     return { ...state }
   }
 
+  if (action.type === 'ROLL_PEOPLE') {
+    if (state.config.break) {
+      state.config.pastRounds = 0
+    } else {
+      const first = state.people.shift()
+      state.people.push(first!)
+      sanitizePeople(state)
+      state.config.pastRounds++
+    }
+    state.config.break = (state.config.pastRounds > state.config.roundCount)
+    return { ...state }
+  }
+
   const newState = actionHandlers(state, action)
 
   const pathname = window.location.pathname
@@ -47,6 +60,9 @@ const actionHandlers = (state: GlobalState, action: { type: any; payload: any; }
     case 'SET_STARTED':
       state.started = action.payload
       return { ...state }
+    case 'SET_FIRST_STARTED':
+      state.firstStarted = action.payload
+      return { ...state }
     case 'ADD_PERSON':
       state.people.push({ id: uuidV4(), name: action.payload, isDriver: false, isNavigator: false })
       if (state.people.length > 1) {
@@ -61,17 +77,6 @@ const actionHandlers = (state: GlobalState, action: { type: any; payload: any; }
       state.people = action.payload
       sanitizePeople(state)
       return { ...state }
-    case 'ROLL_PEOPLE':
-      if (state.config.break) {
-        state.config.pastRounds = 0
-      } else {
-        const first = state.people.shift()
-        state.people.push(first!)
-        sanitizePeople(state)
-        state.config.pastRounds++
-      }
-      state.config.break = (state.config.pastRounds > state.config.roundCount)
-      return { ...state }
     case 'SET_CONFIG_ROUND_MINUTES':
       state.config.roundMinutes = parseInt(action.payload)
       return { ...state }
@@ -84,12 +89,13 @@ const actionHandlers = (state: GlobalState, action: { type: any; payload: any; }
     case 'SET_CONFIG_TAKE_A_BREAK':
       state.config.break = true
       return { ...state }
+    case 'SET_CONFIG_DATES':
+      state.config.roundDate = action.payload.roundDate
+      state.config.breakDate = action.payload.breakDate
+      return { ...state }
     case 'RESET_CONFIG':
       state.config = initialTimeConfig
       state.firstStarted = false
-      return { ...state }
-    case 'SET_FIRST_STARTED':
-      state.firstStarted = action.payload
       return { ...state }
     default:
       return state
