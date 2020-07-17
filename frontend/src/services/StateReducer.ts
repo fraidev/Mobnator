@@ -2,39 +2,47 @@ import { v4 as uuidV4 } from 'uuid'
 import GlobalStateRepository from './LogicService'
 import { GlobalState } from '../models/types'
 import { initialTimeConfig } from './StateStore'
-// import openSocket from 'socket.io-client'
+import openSocket from 'socket.io-client'
 import axios from 'axios'
 
+export const socket = openSocket('http://localhost:5004')
+
 const StateReducer = (state: GlobalState, action: { type: any; payload: any; }) => {
-  const newState = handlers(state, action)
-  GlobalStateRepository.saveState(newState)
+  if (action.type === 'SYNC') {
+    if (action.payload) {
+      state = action.payload
+      console.log(action.payload)
+    } else {
+      const chace = GlobalStateRepository.getState()
+      if (chace) {
+        state = chace
+      }
+    }
+    return { ...state }
+  }
+
+  const newState = actionHandlers(state, action)
+
+  const pathname = window.location.pathname
+  if (pathname === '/') {
+    GlobalStateRepository.saveState(newState)
+  } else {
+    socket.emit('UPDATE_STATE', { token: pathname.substring(1), state: newState })
+  }
 
   return newState
 }
 
-// const socket = openSocket('http://localhost:5004')
-
-const handlers = (state: GlobalState, action: { type: any; payload: any; }) => {
+const actionHandlers = (state: GlobalState, action: { type: any; payload: any; }) => {
   switch (action.type) {
     case 'SHARE':
       state = GlobalStateRepository.getState()!
 
-      axios.post('http://localhost:5002/api/share', { state })
+      axios.post('http://localhost:5002/api/share', state)
         .then(res => {
           // socket.emit('send:message', res.data)
           window.location.pathname = '/' + res.data
         })
-      return { ...state }
-    case 'SYNC':
-      if (action.payload) {
-        state = action.payload
-        console.log(action.payload)
-      } else {
-        const chace = GlobalStateRepository.getState()
-        if (chace) {
-          state = chace
-        }
-      }
       return { ...state }
     case 'SET_STARTED':
       state.started = action.payload

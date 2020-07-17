@@ -1,16 +1,16 @@
-import socketIo, { Socket } from 'socket.io';
+import { Socket } from 'socket.io';
+import { client } from './RedisService';
 
-const socket = socketIo.listen(5004);
 
 // export function for listening to the socket
 const sockets = (socket: Socket) => {
 
-  // broadcast a user's message to other users
-  socket.on('send:message', function (data) {
-    console.log(data);
+  socket.on('UPDATE_STATE', function (data: { token: string, state: any }) {
+    const state = JSON.stringify(data.state)
+    client.set(data.token, state)
+    socket.broadcast.emit(data.token, state)
   });
 };
 
-socket.sockets.on('connection', sockets);
 
-export default socket
+export default sockets

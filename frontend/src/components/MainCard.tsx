@@ -7,6 +7,7 @@ import { StateContext } from '../services/StateStore'
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever'
 import GroupIcon from '@material-ui/icons/Group'
 import axios from 'axios'
+import { socket } from '../services/StateReducer'
 
 export interface Item {
   id: number;
@@ -24,14 +25,16 @@ const MainCard: React.FC = () => {
 
   useEffect(() => {
     const pathname = window.location.pathname
-    console.log(pathname)
     if (pathname === '/') {
       dispatch({ type: 'SYNC', payload: null })
     } else {
       setShared(true)
-      axios.get('http://localhost:5002/api/state', { params: { token: pathname.substr(1) } }).then((res) => {
-        console.log(res)
-        dispatch({ type: 'SYNC', payload: JSON.parse(res.data).state })
+      const token = pathname.substring(1)
+      axios.get('http://localhost:5002/api/state', { params: { token: token } }).then((res) => {
+        dispatch({ type: 'SYNC', payload: JSON.parse(res.data) })
+        socket.on(token, (state: string) => {
+          dispatch({ type: 'SYNC', payload: JSON.parse(state) })
+        })
       })
     }
   }, [dispatch, setStarted])

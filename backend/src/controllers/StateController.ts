@@ -8,6 +8,7 @@ const stateControllerRouter = express.Router();
 stateControllerRouter.get('/state', async (req, res): Promise<void> => {
   try {
     const state = await getAsync(req.query.token)
+    console.log(state)
     res.json(state)
 
   } catch (err) {
@@ -22,11 +23,9 @@ stateControllerRouter.post('/share', async (req, res): Promise<void> => {
   try {
     const token = crypto.randomBytes(5).toString('hex')
     client.set(token, JSON.stringify(req.body))
-    socket.on(token, function (data) {
-      client.set(token, JSON.stringify(data))
-      console.log(data);
-    });
-    console.log(req.body)
+
+
+    // console.log(req.body)
     res.json(token);
 
   } catch (error) {
