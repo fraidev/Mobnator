@@ -1,12 +1,12 @@
 import express from 'express'
 import crypto from 'crypto'
-import { getAsync, client } from 'src/services/RedisService'
+import { redisService } from './../services/RedisService'
 
 const stateControllerRouter = express.Router()
 
 stateControllerRouter.get('/state', async (req, res): Promise<void> => {
   try {
-    const state = await getAsync(req.query.token)
+    const state = await redisService().getAsync(req.query.token)
     console.log(state)
     res.json(state)
   } catch (err) {
@@ -20,7 +20,7 @@ stateControllerRouter.get('/state', async (req, res): Promise<void> => {
 stateControllerRouter.post('/share', async (req, res): Promise<void> => {
   try {
     const token = crypto.randomBytes(5).toString('hex')
-    client.set(token, JSON.stringify(req.body))
+    redisService().client.set(token, JSON.stringify(req.body))
 
     // console.log(req.body)
     res.json(token)
