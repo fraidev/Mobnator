@@ -9,7 +9,11 @@ const server = () => {
   const middlewares = () => {
     expressApplication.use(bodyParser.json())
     expressApplication.use(bodyParser.urlencoded({ extended: true }))
-    expressApplication.use(cors())
+    const corsOptions = {
+      origin: '*',
+      optionsSuccessStatus: 200
+    }
+    expressApplication.use(cors(corsOptions))
   }
 
   const routes = () => {
