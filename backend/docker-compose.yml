@@ -1,0 +1,17 @@
+version: '3'
+services:
+  mobnator-backend:
+    image: mobnator-backend
+    restart: always
+    build: .
+    ports:
+     - "5004:5004"
+    links:
+      - redis
+  redis:
+    container_name: redis
+    image: redis
+    volumes:
+      - ./data:/data/db
+    ports:
+      - "6379:6379"

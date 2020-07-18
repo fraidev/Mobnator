@@ -10,5 +10,5 @@ ADD . /usr/src/app
 # TypeScript
 RUN yarn build
 # Start
-CMD [ "node", "dist/index.js" ]
 EXPOSE 5004
+CMD [ "node", "dist/index.js" ]
