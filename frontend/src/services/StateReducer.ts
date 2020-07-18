@@ -5,7 +5,7 @@ import { initialTimeConfig } from './StateStore'
 import openSocket from 'socket.io-client'
 import axios from 'axios'
 
-export const socket = openSocket(process.env.REACT_APP_BACKEND_BASE_URL!)
+export const socket = openSocket(process.env.REACT_APP_BACKEND_BASE_URL!, { transports: ['websocket'] })
 
 const StateReducer = (state: GlobalState, action: { type: any; payload: any; }) => {
   if (action.type === 'SYNC') {
