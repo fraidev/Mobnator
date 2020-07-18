@@ -85,7 +85,7 @@ const DndPeople: React.FC = () => {
   }
 
   const rightClickMenu = (person: Person, index: number) => {
-    if (state.mode !== 'paused') {
+    if (state.mode === 'paused') {
       return (
         <ContextMenu id={index.toString()}>
           {/* <MenuItem data={{ command: 'navigator', person: person, index: index }} onClick={handleClick}>
