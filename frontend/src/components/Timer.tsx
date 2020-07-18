@@ -18,8 +18,8 @@ const Timer = forwardRef((props: { onFinish: () => void }, ref: Ref<TimeRef>) =>
 
     const minutes = config.break ? config.breakMinutes : config.roundMinutes
     const start = config.break ? config.breakDate : config.roundDate
-    // const endDate = new Date(start + minutes * 60000).getTime()
-    const endDate = new Date(start + minutes * 1000).getTime() // REmove THIS
+    const endDate = new Date(start + minutes * 60000).getTime()
+    // const endDate = new Date(start + minutes * 1000).getTime() // REmove THIS
     setEnd(endDate)
     const time = getTime()
 
