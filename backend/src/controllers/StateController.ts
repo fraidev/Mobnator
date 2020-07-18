@@ -20,7 +20,7 @@ stateControllerRouter.get('/state', async (req, res): Promise<void> => {
 stateControllerRouter.post('/share', async (req, res): Promise<void> => {
   try {
     const token = crypto.randomBytes(5).toString('hex')
-    redisService().client.set(token, JSON.stringify(req.body))
+    redisService().client.setex(token, (60 * 60 * 24 * 7), JSON.stringify(req.body))
 
     // console.log(req.body)
     res.json(token)
