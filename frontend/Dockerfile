@@ -1,6 +1,6 @@
-FROM node:alpine as builder
+FROM node:12-alpine as builder
 
-RUN apk update && apk add --no-cache make git python autoconf g++ libc6-compat libjpeg-turbo-dev libpng-dev nasm
+RUN apk update && apk add --no-cache make git autoconf libc6-compat libjpeg-turbo-dev libpng-dev nasm
 
 WORKDIR /usr/src/app
 COPY . .

@@ -1,17 +1,13 @@
-import redis from 'redis'
-import { promisify } from 'util'
+import { createClient } from "redis";
 
-export const redisService = () => {
-  const client = redis.createClient({
-    host: 'redis',
-    port: 6379
-  })
-  const getAsync = promisify(client.get).bind(client)
-  client.on('error', function (error) {
-    console.error(error)
-  })
+export const redisService = async (url: string) => {
+  const client = await createClient({url})
+    .on("error", function (error) {
+      console.error(error);
+    })
+    .connect();
 
-  return { client, getAsync }
-}
+  return client;
+};
 
-export default redisService()
+export default redisService;

@@ -1,42 +1,20 @@
 {
-  "compilerOptions": {
-    "target": "es6",
-    "module": "commonjs",
-    "lib": [
-      "es6"
-    ],
-    "allowJs": true,
-    "outDir": "./dist",
-    "rootDir": "./",
-    "removeComments": true,
-    "typeRoots": [
-      "./node_modules/@types",
-      "./src/@types"
-    ],
-    "moduleResolution": "node",
-    "esModuleInterop": true,
-    "resolveJsonModule": true,
-    "experimentalDecorators": true,
-    "emitDecoratorMetadata": true,
-    "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true,
-    "baseUrl": ".",
-    "paths": {
-      // "@controllers/*": [
-      //   "./src/controllers/*"
-      // ],
-      // "@models/*": [
-      //   "./src/models/*"
-      // ],
-      // "@views/*": [
-      //   "./src/views/*"
-      // ],
-      // "@config/*": [
-      //   "./src/config/*"
-      // ]
-    }
-  },
-  "include": [
-    "src/**/*"
-  ],
+    "compilerOptions": {
+        "target": "es2022",
+        "lib": ["ES2022"],
+        "allowJs": true,
+        "skipLibCheck": true,
+        "esModuleInterop": true,
+        "allowSyntheticDefaultImports": true,
+        "strict": true,
+        "forceConsistentCasingInFileNames": true,
+        "noFallthroughCasesInSwitch": true,
+        "esModuleInterop": true,
+        "module": "node16",
+        "resolveJsonModule": true,
+        "isolatedModules": true,
+        "outDir": "dist"
+    },
+    "include": ["src/**/*"],
+    "exclude": ["node_modules"]
 }

@@ -16,7 +16,7 @@
     "react-dom": "16.13.1",
     "react-router-dom": "^5.2.0",
     "react-scripts": "3.4.1",
-    "socket.io-client": "^2.3.0"
+    "socket.io-client": "^4.7.2"
   },
   "devDependencies": {
     "@babel/core": "7.0.0",
@@ -27,7 +27,7 @@
     "@types/jest": "24.9.0",
     "@types/node": "12.12.12",
     "@types/react-router-dom": "^5.1.5",
-    "@types/socket.io-client": "^1.4.33",
+    "@types/socket.io-client": "^3.0.0",
     "@typescript-eslint/eslint-plugin": "3.6.1",
     "@typescript-eslint/parser": "3.6.1",
     "babel-jest": "24.9.0",

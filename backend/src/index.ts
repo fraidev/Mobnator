@@ -1,11 +1,17 @@
-import expressApplication from './expressApplication'
-import socketIo from 'socket.io'
-import sockets from './services/Socket'
-import { Server } from 'http'
+import { redisService } from "./services/RedisService";
+import expressApplication from "./expressApplication";
+import sockets from "./services/Socket";
+import http from "http";
 
-const server = new Server(expressApplication)
+async function main() {
+  const redis = await redisService(process.env.REDIS_URL as string);
+  const server = http.createServer(expressApplication(redis));
 
-socketIo.listen(server)
-  .sockets.on('connection', sockets)
+  const io = require('socket.io')(server);
 
-server.listen(5004)
+  io.on('connection', sockets(redis))
+
+  server.listen(5004);
+}
+
+main().catch((error) => console.log(error));

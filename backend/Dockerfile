@@ -1,4 +1,4 @@
-FROM node:alpine
+FROM node:16-alpine
 # Create Directory for the Container
 WORKDIR /usr/src/app
 # Only copy the package.json file to work directory
